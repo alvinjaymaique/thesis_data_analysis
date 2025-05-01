@@ -1,0 +1,45 @@
+Raw data: 20000
+  KMeans completed in 0 mins 5 secs
+  Silhouette: 0.5227
+  Davies-Bouldin: 0.7624
+  Calinski-Harabasz: 13990.3958
+
+Best clustering model: KMeans
+Silhouette Score               0.522730
+Davies-Bouldin Index           0.762373
+Calinski-Harabasz Index    13990.395796
+Name: KMeans, dtype: float64
+Step 7 completed in 59.8 seconds
+
+
+Raw data: 35000
+  KMeans completed in 0 mins 15 secs
+  Silhouette: 0.4993
+  Davies-Bouldin: 0.9396
+  Calinski-Harabasz: 19116.4837
+
+Best clustering model: KMeans
+Silhouette Score               0.499298
+Davies-Bouldin Index           0.939643
+Calinski-Harabasz Index    19116.483658
+Name: KMeans, dtype: float64
+Step 7 completed in 159.9 seconds
+
+Raw data: 100_000
+  - Calculating evaluation metrics...
+    - Computing Silhouette Score...
+    - Computing Davies-Bouldin Index...
+    - Computing Calinski-Harabasz Index...
+  KMeans completed in 2 mins 32 secs
+  Silhouette: 0.5314
+  Davies-Bouldin: 0.6971
+  Calinski-Harabasz: 81781.4065
+
+Best clustering model: KMeans
+Silhouette Score               0.531404
+Davies-Bouldin Index           0.697094
+Calinski-Harabasz Index    81781.406502
+Name: KMeans, dtype: float64
+Step 7 completed in 2325.3 seconds
+
+[Step 8/8] Analyzing clusters...

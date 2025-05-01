@@ -1,0 +1,965 @@
+﻿Explainable AI (XAI) Integration to Cyber-Physical Anomaly Detection in Intelligent Sensor Networks under the Power Quality Monitoring in Cebu[a]
+An Undergraduate Thesis
+Presented to the Faculty of the
+Department of Computer Engineering of
+Cebu Technological University- Main Campus
+Cebu City, Philippines
+
+In Partial Fulfillment of the
+Requirements for the Degree of
+Bachelor of Science in Computer Engineering
+
+
+By
+Maique, Alvin Jay B.
+Matarong, Lindon B.
+Paraiso, Rhea D.
+
+Jayson C. Jueco, REE
+Thesis Adviser
+
+Rafran P. de Villa, PCpE, MCS
+Thesis Co-Adviser
+
+December 2024
+Table of Contents
+
+
+List of Figures        IV
+List of tables        V
+Chapter 1        6
+The Problem and Its Settings        6
+1.1 Rationale        6
+1.2 Statement of the Problem        8
+1.3 Objectives        9
+1.4 Significance of the Study        9
+1.5 Scope and Delimitations        10
+1.6 Definition of Terms        11
+Chapter 2        13
+Literature Review        13
+2.1 State of the Art in Anomaly Detection in ISNs        16
+2.2 Statistical Methods        16
+2.3 Machine Learning Algorithms        17
+2.4 Evaluation and Comparison        17
+2.5 Deep Learning Approaches        17
+2.6 Convolutional Neural Networks        18
+2.7 Recurrent Neural Networks        18
+2.8 Generative Adversarial Networks        19
+2.9 Challenges and Limitations        19
+2.10 Overview of XAI        20
+2.11 XAI Techniques        22
+2.11.1 Model-Agnostic        23
+LIME        23
+SHAP        24
+2.11.2 Model-Specific Methods:        24
+Attention Mechanisms        25
+Feature Importance        25
+Visualization Techniques        26
+2.12 Use in Power Quality Monitoring Anomaly Detection        26
+2.13 XAI in Anomaly Detection        27
+2.13.1 Previous Research on the Integration of XAI into Anomaly Detection        27
+2.13.2 Case Studies        27
+2.13.3 Potential approaches        28
+2.13.4 Improved interpretability        28
+2.14 XAI-Based Anomaly Detection        29
+2.15 XAI in Power Quality Monitoring        29
+2.15.1 Specific Challenges        29
+2.15.2 Real-Time Requirements        29
+2.15.3 Privacy and Security Concerns        30
+2.15.4 Fault Diagnosis        30
+2.16 Load Forecasting        31
+2.17 State Estimation        31
+2.18 Methods Used in Previous Studies        32
+2.18.1 Data Collection and Preprocessing        32
+2.18.2 Anomaly Detection        32
+2.18.3 XAI Integration        33
+2.18.4 Evaluation Metrics        33
+2.18.5 Ethical Considerations        34
+2.19 Conclusion        34
+Chapter 3        35
+Methodology        35
+3.1  Introduction        35
+3.2 Research Workflow        36
+3.3 Research Environment        37
+1. Balud, Dalaguete, Cebu (CEBECO I)        39
+2.South Poblacion, San Fernando, Cebu (VECO)        39
+3. Opon-Airport Road, Brgy. Pajo, Lapu-Lapu City (MECO)        39
+4. Baliwagan, Balamban, Cebu (CEBECO III)        40
+5. Argawanon, San Remigio, Cebu. (CEBECO II)        40
+6. Purok Nokus, Sitio Centro, Malbago, Madridejos, Cebu (BANELCO).        40
+3.5 Hardware Design of IoT-Based Sensor Network        40
+3.6 Parameters for Anomaly Classification        42
+3.6.1 Deployment of IoT-Based Sensor Network        42
+3.6.2 Data Acquisition        42
+1. Anomaly Status        43
+2. Voltage        43
+3. Power        43
+4. Current        43
+5. Power Factor        44
+6. Frequency        44
+3.7 Software Design        45
+3.7.1 Login and Register page        45
+3.7.2 Overview page        46
+3.7.3 Historical data page        48
+3.7.4 Status report        49
+3.8 Experimental Set-up        53
+3.8.1 Hardware Set-up        53
+3.8.2 Software Set-up        56
+3.8.3 Data Transmission and Analysis Set-up        58
+3.8.4 Data Storage Set-up        60
+3.8.5 String Explanation in Status Report        60
+3.9 Firebase Realtime Database for IoT Data for Anomaly Detection        61
+3.10 Data Logger        62
+3.11 Training Duration        64
+3.12 Clustering Methods        64
+1. K-Means        64
+2. Spectral Clustering        65
+3. Ward Hierarchical Clustering        65
+4. Agglomerative Clustering        66
+5. Gaussian Mixture Model        66
+3.13 Possible Rules and Disturbances for Determining Labels for Clustered Data        67
+3.14 Evaluation Metrics        67
+3.14.1 Silhouette Coefficient Score        68
+3.14.2 Davies-Bouldin Index        68
+3.14.3 Calinski-Harabasz Index        69
+3.15 Classification Methods        70
+3.15.1 Decision Trees        70
+3.15.2 Logistic Regression        70
+3.15.3 Random Forest        71
+3.15.4 Support Vector Machine (SVM)        72
+3.15.5 Gradient Boosting Machine (GBM)        72
+3.15.6 Multi-Layer Perceptron (MLP)        73
+3.16 Shapley approach of Explainable AI        74
+3.17 Evaluation Metrics of Explanation        76
+3.17.1 Consistency Metric        76
+3.17.2 Stability Metric        77
+3.17.3 Compacity Metric        78
+3.17.4 Table for Shap Evaluation Metrics        79
+References:        81
+
+
+
+
+List of Figures
+Figure 3.1 Research Workflow        36
+Figure 3.2 Anomaly Detection Stage        37
+Figure 3.3 Visualization of Sensor Network in a Household        41
+Figure 3.4 Schematic Diagram of the Sensor Network        42
+Figure 3.5 Login Page        45
+Figure 3.6 Sign Up Page        46
+Figure 3.7 Overview page        47
+Figure 3.8 Data analysis page        48
+Figure 3.9 Status report page        50
+Figure 3.10 Status report page        50
+Figure 3.11 Status report page        51
+Figure 3.12 Status Report Output        52
+Figure 3.14 Hardware Process Flowchart        54
+Figure 3.15 Hardware Wifi and Database Connection Flowchart        55
+Figure 3.16 Normal Operation Flowchart        56
+Figure 3.17 Software Process Flowchart        57
+Figure 3.18 Software Process Flowchart        57
+Figure 3.19 Data Transmission Flowchart        59
+Figure 3.20 Data Logger        63
+
+
+
+
+
+
+
+
+
+
+List of tables
+Table 3.1 Site Locations        39
+Table 3.2 Rules for labeling clusters        67
+Table 3.3 Shap Evaluation Metrics Table        80
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Chapter 1 
+The Problem and Its Settings
+1.1 Rationale
+Power quality is essential for ensuring the reliability and stability of power distribution systems, especially in regions like Cebu, where a good quality of electricity is crucial for economic and social activities. Traditional power quality monitoring methods often fail to detect and address real-time anomalies. These methods are not adaptive to dynamic and complex data patterns, making it difficult for utility providers to take proactive measures [1]. Moreover, machine learning (ML) integration in power systems is evolving rapidly due to advancements in computational power and data availability [2]. One key application of machine learning in power systems monitoring is anomaly detection, which effectively identifies unusual patterns and deviations from normal behavior, enabling accurate predictions and fault detection. However, more transparency is often needed regarding how decisions are made. This lack of explanation classifies these models as "black box," making it difficult for stakeholders to understand the decision-making process. This can hinder trust among stakeholders, especially in the energy sector, where accountability and reliability are essential [3]. Each decision of anomaly detection in power systems can significantly affect safety and operational efficiency; thus, the need for interpretability of the model poses serious challenges. 
+To address these challenges, the study of Explainable Artificial intelligence (XAI) rises, which aims to enhance the transparency of ML models, enabling utility operators to gain insights into their inner workings without sacrificing performance. Recent advancements in XAI techniques offer promising opportunities to improve the explainability of complex models, thus building greater trust and enabling their application in anomaly detection in power systems [4]. 
+This study aims to integrate Explainable Artificial intelligence (XAI) into anomaly detection within cyber-physical systems, particularly in intelligent sensor networks for power quality monitoring in selected areas in Cebu, Philippines. The researchers utilize the Shapley approach of XAI, which provides global and local explanations; it calculates each feature's average contribution across all possible feature combinations, making SHAP more reliable for consistent feature importance. 
+The methodology integrates machine learning techniques with clustering methods and XAI frameworks to classify and explain anomalies. Clustering algorithms, such as K-means, Spectral clustering, Ward Hierarchical Clustering, Agglomerative clustering, and Gaussian Mixture Models (GMM), play a pivotal role in categorizing data into normal and anomalous patterns based on power quality parameters. These methods enable the detection of irregularities by grouping data points with similar characteristics, which is essential for identifying unusual behaviors in real-time sensor data [5]. The study will assess these clustering methods, which performs well in grouping and labeling anomalies in power systems. Once anomalies are clustered, the classification model will classify what type of anomaly is being detected, then  SHAP (Shapley Additive Explanations) technique of XAI provides explanations for the detected anomalies, ensuring stakeholders can understand the reasoning behind the anomaly detection model decisions.
+This research is crucial for enhancing power systems in Cebu by reducing downtime and improving the reliability of power distribution. The integration of XAI allows utility providers and stakeholders to gain insights into the causes of anomalies, enabling proactive maintenance and better resource allocation. By making ML model decisions interpretable, the study fosters trust and accountability, which are essential for critical infrastructure management. The findings of this study are transferable to other regions and sectors facing similar challenges in power quality management.
+Evaluating the results of clustering and the quality of XAI explanations is essential to ensure reliability and trust. This research uses both performance metrics of clustering and explanation quality metrics to validate the result of the system:
+1. Silhouette Coefficient Score, Davies-Bouldin Index, and Calinski-Harabasz Index: These metrics assess the model’s ability to correctly cluster anomalies, ensuring it reliably distinguishes between normal and anomalous events.
+2. Consistency: Evaluate whether different XAI methods explain the same predictions similarly. A high consistency score builds trust by ensuring the explanations align across methods.
+3. Stability: Measures the robustness of explanations when minor changes occur in input data. Stable explanations indicate that the model’s behavior is predictable and reliable, even with slight input variations.
+4. Compacity: Assesses whether a small subset of features can adequately explain the model’s predictions. High compactness suggests that explanations remain clear and concise, improving stakeholder interpretability.
+This study highlights the critical role of Explainable AI (XAI), particularly the SHAP technique, in enhancing transparency and trust in anomaly detection within cyber-physical systems and intelligent sensor networks for power quality monitoring. By providing clear and actionable insights into why anomalies occur, SHAP transforms complex machine learning models from "black boxes" into interpretable tools, fostering stakeholder accountability and confidence. The goal is to develop a robust, XAI-driven anomaly detection framework that accurately identifies power quality issues to deliver consistent, stable, and concise explanations. This enables utility providers, engineers, and policymakers to make proactive, informed decisions, ultimately improving power systems' reliability, efficiency, and resilience in Cebu.
+
+
+1.2 Statement of the Problem[b]
+The rapid development of Artificial Intelligence (AI) has led to the adoption of machine learning models for anomaly detection in various fields, including power distribution systems. However, many of these models are difficult to interpret and understand [1]. This lack of transparency creates challenges for stakeholders and utility providers, who are unable to fully comprehend the reasons behind detected anomalies, undermining trust in AI-driven decisions. Traditional methods of anomaly detection lack precision and fail to provide actionable insights, further limiting the effectiveness of power management strategies. The problem addressed by this study is the lack of interpretability and transparency in AI-driven anomaly detection models integrated into power distribution systems in Cebu, Philippines.
+
+
+1.3 Objectives
+This study proposes to enhance the power distribution at selected distribution utilities in Cebu, Philippines by integrating Explainable AI into the anomaly detection model. The monitoring is to be improved upon through interpretation and explainability of the detected anomalies, thereby enabling the stakeholders and utility providers to understand the reasons for such detected anomalies. Specifically, this study shall:
+1. Identify the critical electrical parameters that caused the anomaly through XAI, specifically using Shapley values.
+2. Develop XAI techniques to make detected anomalies more interpretable and explainable
+3. Evaluate the performance of the integrated system in actual operation.
+Contributed to the development of a more reliable and trustworthy anomaly detection system that supports actionable insight in power quality monitoring in Cebu, Philippines.
+
+1.4 Significance of the Study
+This research addresses critical issues on power distribution in Cebu and provides targeted answers to the most relevant groups. First, for utility providers, the system will be integrated with XAI into anomaly detection systems so that system failures are detected early, allowing proactive maintenance strategies. This will improve the reliability of power distribution in Cebu and reduce service interruptions for consumers. Secondly, for stakeholders, it is giving interpretable results that help utility companies, policymakers, and engineers make decisions with evidence. This therefore minimizes power disruptions and optimally enhances system performance toward better Cebu power infrastructure. Third, it continues to progress for future researchers to apply XAI techniques such as SHAP and LIME on power systems. Such methods increase the transparency and trustworthiness of AI models, and therefore pave the way for more reliable AI-driven infrastructure management tools. Finally, in response to the regional power challenges to Cebu, the paper will give insights on how Explainable Artificial Intelligence, can transform power distribution systems by providing an interpretable solution to very complex problems.
+
+
+1.5 Scope and Delimitations
+This research focuses on integrating Explainable AI (XAI) into Cyber Cyber-Physical Anomaly Detection in Intelligent Sensor Networks for Power Quality Monitoring within specific areas of Cebu, Philippines. The study aims to explain and interpret the detected anomalies, enhancing reliability and decision-making. However, this study is limited to specific locations in Cebu, Philippines, and the findings may need to be more generalizable to other areas.
+ The research relies on the deployed IoT-based sensor networks of the collaborative research group, which may the findings might not be relevant or valuable to other types of sensor networks from other sources. The study primarily focuses on the data gathered from the deployed sensor networks. The research will not cover other aspects but will provide interpretations and explanations of the detected anomalies.
+Additionally, the research does not consider downtime, such as Wi-Fi outages that might occur during the collection or transmission process of the data. These may impact the accuracy and completeness of the data and create voids or inconsistency in the data collected. The disruptions are not included in the interpretation and analysis of anomalies done in this study, and any impact that was caused by such downtime is also not within the scope of research
+Furthermore, the study assumes that households where sensor networks are installed have a stable internet connection for real-time data transmission. In areas with limited or unstable internet connectivity, data transmission may be delayed or incomplete, which may have a negative impact on the timeliness and accuracy of anomaly detection. This may affect the overall effectiveness of the anomaly detection system and needs to be considered when interpreting the results.
+Lastly, harmonics and overload anomalies are excluded from the clustering and classification processes due to the limitations of sensor sampling rates, which cannot capture the high-frequency data required for these anomalies. 
+
+
+1.6 Definition of Terms
+* Cyber-Physical Systems (CPS): A system that combines computation and physical actions with sensors, actuators, and networks to automate and control processes.
+* Explainable AI (XAI): A subfield of AI, Explainable AI (XAI) concentrates on improving model transparency and interpretability, offering explanations for questions related to decisions or predictions.
+* Intelligent Sensor Networks (ISNs): A network of sensors utilizing AI for real-time monitoring, processing, and decision-making.
+* Anomaly Detection:  Identifies unusual data patterns that may indicate potential issues or security threats.
+* Power Quality Monitoring:  The process involves measuring and analyzing important electrical parameters like voltage, current, frequency and power factor to clearly determine the quality of the electrical supply provided to consumers.
+* SHAP (SHapley Additive exPlanations): A XAI method based on game theory that explains how individual features contribute to a model's prediction.
+* LIME (Local Interpretable Model-agnostic Explanations): A model-agnostic XAI approach offering local explanations of the predictions by simulating the behavior of a complex model with simpler, more interpretable models.
+* Transformer-GAN: A GAN will use a transformer architecture for better working with complex time-series data along with improvements on the anomaly detection.
+* Autoencoder: This is a neural network, compressing data and reconstructing it to point anomalies, such as deviations from reconstruction itself.
+* Decision Tree: A supervised machine learning model that makes decisions using a tree structure and rules.
+* Random Forest: A supervised machine learning model uses a hyperplane to classify data points.
+* Support Vector Machine (SVM): A supervised machine learning model uses a hyperplane to classify data points.
+* Isolation Forest:An unsupervised model analyzes anomalies by isolating them from normal data using random forests.
+* Neural Network: A machine learning model with linked nodes that qualify information, concerning what patterns to learn.
+* Clustering: A machine learning method that groups data points by similarity for pattern recognition and analysis.
+* Black-Box Models: Complex models of machine learning like deep neural networks have decision-making processes that are hard for humans to interpret.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Chapter 2 
+Literature Review
+The utilization of Cyber-Physical Systems (CPS) continues progressing as technology advances. Many physical activities are now integrated with CPS to monitor, communicate, automate, and more. As defined in the study of [6], CPS is the combination of computational and physical activities. It is a network of computing devices that interact with physical activities through sensors and actuators, and the systems' output is used to input future actions. CPS applications range widely in various domains, such as smart homes, e-commerce, industry automation, smart grids, and more [7]. In critical infrastructure such as power grids, the role of CPS is to make this power grid smart, improving efficiency and ensuring continuous and stable power distribution; this is supported by the study of [8], as authors mentioned that this will transform the modern industry as it offers a significant solution in improving the traditional grids. 
+Intelligent sensor networks (ISNs) are commonly used in CPS, especially when dealing with more complex situations where real-time monitoring, processing, and decision-making are crucial as they are more advanced. ISNs combine Artificial intelligence (AI) into a sensor network to enhance the sensor's capabilities, making it intelligent, efficient, and responsive. This concept of ISNs is supported by the study of [9], which highlights in their study that the combination of Wireless sensor networks with AI transforms the efficiency, productivity, and sustainability of many sectors into more enhanced ones. 
+As illustrated in the study of [10], leveraging ISNs to advanced sensors and communication technologies such as TCP/IP to collect and process data for power quality monitoring and gather data from multiple sources simultaneously ensures reliable transmission and efficient information process. These capabilities of ISNs are crucial for monitoring power quality to stabilize and maintain reliable power and relieve some, nonetheless serious, problems associated with it, such as breakdowns of equipment, monetary losses, and inefficient running of infrastructures. Besides, it is also ensured that disturbances within the voltage, such as sags, swells, and harmonics, are worth monitoring as effectively as possible. 
+
+
+The ISNs are composed of various sensors spread out on the power system. These other kinds of sensors are to monitor different aspects of power quality, collect data from the system, and determine what parameters affect the power quality. This information is sent to the central unit, making analysis with algorithms or methods. 
+          Several techniques have been developed to enhance ISN detection of disturbances in power quality monitoring, such as voltage sags, swells, and harmonics. For instance, the study of [11] presents a MATLAB-based simulation approach for a comprehensive power quality monitoring system. 
+However, Intelligent Sensor Networks also present challenges in detecting anomalies, especially in power quality. [1] present significant issues, such as when dealing with traditional methods, it needs to work on more complex and high dimensional data as it struggles. In addition, [12] also mentioned that physical attributes contributed to the challenges of ISNs as there is an impact of topology or load/generation on the sensor. On the other hand, in the other domains, where data may be more static or less complex, power quality monitoring requires a robust and reliable algorithm capable of understanding and handling complex data and variability of power quality data based on current conditions and historical trends, as demonstrated by innovative models like Transformer-GAN and multi-layer autoencoders [13][1]. 
+Traditional methods and machine learning algorithms have been evaluated by previous research, in which strengths and weaknesses in accuracy and interpretability are highlighted in these studies. Although the traditional method is efficient, it works on highly complex data less effectively and needs help dealing with high dimensional data [1] On the other hand, Machine learning models, while more proficient than traditional data at handling complex data, encounter problems in interpreting results and underlying causes of the anomalies since they usually operate as "black boxes" [14][15]. In addition, it also has its challenges, as the study of [16] stated that the machine learning model is more complex, and because of this, it might lead to challenges in interpretability, especially in interpretative situations where understanding models is essential. These challenges and limitations can make systems less effective, which would result in the development of more robust and effective models [17]. 
+Explainability builds transparency, trust, and reliability. It is also important to know what factors and conditions lead to anomalies. Explainability is essential as it enhances the effectiveness and acceptance of AI systems by making them more understandable and reliable, as AI is often seen as a black box. [18] present Explainable Artificial Intelligence Techniques such as SHAP to help users understand specific features that influence anomaly detection. It was also highlighted in the study of [19] that integrating XAI into anomaly detection improves the overall quality of the system.
+2.1 State of the Art in Anomaly Detection in ISNs 
+As security complexities and threats grow, anomaly detection is becoming essential in several sectors—finance, healthcare, cybersecurity, manufacturing, and more. Anomaly detection identifies data patterns that go beyond the expected or standard behavior. Recognizing unusual patterns is essential for preventing probable system failures, protecting against data loss, and minimizing further problems. The studies of [20] [21] [22] [23] mentioned that anomaly detection plays an essential role in detecting suspicious activities such as cyber attacks, fraud in clinical fields, or power quality disturbances. The importance of anomaly detection underlines the ability to take quick actions in security situations and enhances the reliability of scientific research, leading to new proactive and responsive measures in various fields.
+2.2 Statistical Methods
+Several techniques for anomaly detection are utilized, ranging from the traditional method to the advanced method, which is machine learning; it also includes deep learning methods, where unsupervised learning is used for enhanced accuracy [24]. As an illustration, prevalent statistical methods for anomaly detection include Gaussian Mixture Methods and Hidden Markov Models. Each of these methods has its particular operational mechanism and limitations. For example, the Gaussian Mixture Methods model data represents several Gaussian distributions, and this approach allows the identification of outliers based on their probability of appearance within the modeled distribution. The method shows its effectiveness in network intrusion detection, which attains a high F1 score in identifying anomalous traffic patterns [25]. 
+On the other hand, Hidden Markov Models are competent in seizing connections of events within time in data, which makes them suitable where timing matters in such situations, including monitoring bandwidth consumption in networks [26]. 
+Conversely, [27] stated that statistical methods experience difficulties in complicating power quality data, including presenting accurate data that do not follow normal or non-Gaussian distributions. They also face challenges in training data, as it requires a thorough understanding of standard behavior. Because of this, there is a potential risk of incorrectly identifying anomalies in dynamic environments. 
+2.3 Machine Learning Algorithms
+As for the advanced method, machine learning, several algorithms are applied to identify patterns or behaviors unusual from the standard data pattern, such as Support Vector Machines and neural networks. As stated by [28], a Support Vector Machine is particularly good at working with data that has many dimensions as it can handle high dimensional data, and its robustness when overfitting occurs, especially when optimized with techniques like Grey Wolf. While neural networks such as deep and convolutional networks provide flexibility and adaptability, local optima issues affect their accuracy [29]. In short, approaches have their limitations. The choice of algorithm depends on the requirements of specific applications [30]. 
+2.4 Evaluation and Comparison
+In addition, these methods have been evaluated by previous research, in which strengths and weaknesses in accuracy, computational cost, and interpretability are highlighted in these studies. Based on the study of [31], statistical methods are much easier to interpret since it is much more straightforward, and the results can be understood easily, and it also requires less computational power, which means that these methods require less computing resources, making it faster and more efficient. However, statistical methods work less effectively in situations where data are highly complex as they struggle with more complex datasets struggle with highly complex datasets. On the other hand, [32] and [33] stated that machine learning techniques are generally better as they excel more at recognizing and understanding complex data and perform better than statistical methods. However, it also has its challenges, as the study of [16] stated that the machine learning model is more complex, and because of this, it might lead to challenges in interpretability, especially in interpretative situations where understanding models is essential. 
+2.5 Deep Learning Approaches
+Deep learning methods also become prominent in anomaly detection as they utilize advanced neural network architectures to identify deviation of patterns from the standard behavior across various domains. According to [34], some techniques have been proven to have high accuracy and significant effectiveness, such as Convolutional Networks (CNNs), Recurrent Neural Networks (RNSs), Generative Adversarial Networks (GANs), and autoencoders, which achieve 95% network traffic anomaly detection. This is supported by the study of [35], which states, "These methods excel in real-time applications, adapting to dynamic data patterns and enhancing decision-making processes." 
+2.6 Convolutional Neural Networks 
+The study of [36] found that Convolutional Neural Networks are particularly effective in handling spatial relationships. This makes them suitable for analyzing power-quality data over time in the way of converting these signals into time-frequency matrices that capture both time and frequency information. The combined analysis of time and frequency information contributes to the efficiency of the model in accurately identifying types of disturbances. However, it will be shown by integrating CNN into other networks, such as Bidirectional Long Short-memory (BiLSTM) networks. This means that CNN works way better when combined with other networks. On the other hand, the advantage of CNN is mentioned in the study of [37] as it discusses the robustness of CNNs in terms of Noise and efficiency in large datasets, exceeding traditional methods in accuracy and speed. 
+2.7 Recurrent Neural Networks
+Recurrent Neural Networks, particularly their advanced forms such as Long Short Term Memory (LSTM) and Gated Recurrent Units (GRU) are proficient in apprehending temporal dependencies of power quality as their inherent design can handle sequences of different lengths and remember information in time. RNN has this gating mechanism, such as the forget gate, helps RNNs manage information, enabling the model to maintain what to keep and what to ignore, which is important for analyzing power quality disturbances [38]. Also, [39] studies state that the integration of wavelet transforms and attention mechanisms improves the model detections and classifies power quality issues. [40] state that RNNs provide a strong framework for modeling sequential patterns in power quality. 
+2.8 Generative Adversarial Networks
+In order to detect anomalies, Generative Adversarial Networks are used to create fake anomaly data, especially in contexts where the observed data is unusual and might pose threats such as fraud detection and fake news classification. In other words, GANs are like trainers that help models by providing other examples of fake data to improve accuracy in detecting anomalies. It is supported by the study of [41] [42], and [43] as they stated in their study that GANs can model complex data patterns and generate realistic fake data that reflects the statistical properties of real datasets. This helps enhance the performance of the machine learning model. The showed that GANs improve accuracy, precision, and recall in recognizing fraud in financial transactions. Moreover, combining GANs with advanced techniques like ensemble learning effectively addresses both data imbalance and concept drift, further improving anomaly detection, [44]. GANs help minimize data scarcity and enhance the robustness of models against imbalanced datasets, making them valuable for several anomaly detections. 
+2.9 Challenges and Limitations
+Each model and method in anomaly detection also has its challenges and limitations. It will improve as time progresses as models and methods progress. For instance, some models or methods encounter challenges in Noise and uncertainty in power quality, which make anomaly detection systems less effective, as they can disturb or hide accurate signals and cause misclassifications of disturbances. As an illustration, in the study of [39] titled "Noise Level Evaluation on Power Quality Disturbances Classifications," LSTM networks, while good at detecting temporal patterns, also struggle with Noise that is not encountered during training, making it harder to identify power quality disturbances in real-time. Hence, [45] showed techniques for improving data quality and detection accuracy, such as data preprocessing to manage outliers and missing data and using GANs for class imbalance. The study provides also methods in which in the study it mentions that methods like PowerCog used empirical wavelet transform and tri-training to improve levels and make them more robust in noisy situations. Moreover, to reduce the impact of model uncertainty, utilizing multiplicative noise models will lead to much more reliable anomaly detection in cyber-physical systems.
+ In the study of [45], the nonstationary nature of power quality data is changing constantly, making it complicated anomaly detection, which can degrade the performance of traditional methods. Several adaptive strategies have been made to address these challenges. For instance, the study of [46] proposed that the Adaptive Empirical Wavelet Transform technique effectively breaks down the power quality signals, removes Noise, and improves the identification of anomalies without needing to know spectral components. The study of [47] adds up, as the authors mentioned that AID frameworks use a dynamic approach to constantly update their parameters, ensuring robust anomaly detection in industrial systems. 
+Another challenge and limitations model and methods faced is imbalanced data, [48] [49] indicated that a scarcity of anomalies compared to the standard samples significantly hinders anomaly detection accuracy as identifiers tend to favor the majority class, leading to poor generalization on minority instances. More normal samples can mislead models into learning patterns primarily from standard samples, thereby neglecting the unique characteristics of anomalies. The study of [50] presented techniques that have been proposed to address this issue, including oversampling methods like SMOTE, which generate synthetic samples to balance the dataset. Present advanced approaches such as counterfactual augmentation and feature learning have been employed to enhance the representation of minority classes, also hybrid resampling techniques that combine undersampling and oversampling with noise cleaning and weighted majority voting classifiers to improve performance on imbalanced datasets. 
+2.10 Overview of XAI
+Artificial Intelligence and deep learning are rapidly advancing, and models are becoming more complex, which introduces the term “black box” in the field of AI, [51]. It means that the model is complex and its internal process is hidden. As AI models are applied in critical fields, tools that explain their inner workings are needed. 
+According to [52], deep learning models have millions of parameters and are thus highly complex and human-interpretable. As a result, such “black-box” models are widely used in critical fields, like medical AI and autonomous driving. However, the use of these models also brings more potential failures: medical misdiagnoses or car accidents. This emerging challenge highlights the need for a broad set of tools for AI researchers and practitioners to design and understand these increasingly complex models. Machine learning models were becoming more effective and accurate, yet their interpretability was lessened such as in modern machine learning models specifically deep neural networks where they have an over-parameterized black-box nature that leads to distrust of the prediction results of these models [53].
+Explanatory AI, or XAI, was designed to make sense of how a model generates its outputs. [54] go on to say that XAI not only throws light upon how an AI system reaches a particular solution, be that a classification or an object detection result, but also deals with other "wh" questions, such as why or what contributed to the decision. There are more points for which the interpretability may be low, especially in sensitive fields such as finance law, or healthcare. The sectors, in fact, need to develop specific ethics and ethical practices regarding the use of AI. 
+Since AI has become integral in the decision-making processes usually in critical and crucial fields such as healthcare, finance, and energy management. The importance of explainability AI is also growing and it has key principles that support human collaboration which include transparency, interpretability, and accountability. 
+Transparency would emerge as one of the key underpinnings of explainable AI since it overcomes a critical domain of machine learning models, one of which is the black-box nature of them; and this might eventually increase the trust in the outputs that these systems yield. [54] say that explainability is highly relevant in critical domains such as defense, healthcare, law enforcement, and cars self-driven because how decisions are made create needed aspects of trust and transparency. In many applications, providing an explanation of how a solution was reached is key to both trustworthiness and transparency. 
+Interpretability refers to the ease with which one may understand a model's decision making to explain why a particular decision was made. This is useful in that it lowers the risks of misinterpretations and adds to the whole process of making decisions. Achieving clarity on how such a model works builds trust in its decisions. Account in accountable AI is very vital to gain the confidence of experts in important fields because AI is increasingly deployed in fields whose predictions have consequential impacts. According to [55], for developers to recommend the application of a specific model to perform a specific task, then it is the case that the experts first need to know how the model works. Results show that black-box models are not applicable to decisions where accountability is demanded since a deeper revelation of the process in which decisions are made is required. 
+The basic goal of anomaly detection in explainable AI (XAI) is therefore the purpose of clearly explaining why a model identifies certain data points as anomalies. [18] argue that it can be difficult to understand how and why deep learning models make particular decisions because such models are often viewed as being in the nature of black boxes. To address this, the authors propose applying SHAP, a leading XAI technique, toward methodology to better understand what role is played by traffic features in decision-making by anomaly detectors. Such interpretability helps in arriving at a deeper understanding of the network traffic features that may influence the detection process. 
+2.11 XAI Techniques
+In explainability AI, there are three primary methods: model-specific, model-agnostic, and visualization methods. Model outputs and abstract numerical data are transformed into a visual understandable and interpretable representation using visualization techniques [56]. 
+Model-agnostic ability can be defined as the flexibility of any architecture to be used for straightforward application over various architectures of deep learning. As per [57], it is guaranteed to be compatible with any model, for example computer vision tasks using CNNs or transformer models for natural language processing without significant changes. For model-agnostic methods, LIME and SHAP are highlighted. LIME provides local explanations and it explains the features that could affect individual predictions in contrast to the global picture, how SHAP can provide feature importance for generalizing the behavior of models [58]. 
+One of the earlier major contributions to the area of XAI is the Local Interpretable Model-agnostic Explanations (LIME) framework, developed by Ribeiro et al. LIME is a model-agnostic technique designed to provide local explanations for specific predictions made by any classifier. It has had great influence in the development of other model-agnostic methods. Similarly, Lundberg and Lee proposed SHAP, a unified framework that combines different types of feature attribution to provide understandable and consistent explanations for any machine learning model [57]. 
+2.11.1 Model-Agnostic
+LIME
+LIME stands for Local Interpretable Model-agnostic Explanations. This technique was built to make complex machine learning models understandable. As stated in the prior research of [52] LIME uses the model as a "black box," in the sense that it does not analyze the internal workings of the model, namely its structure, parameters, or activation values. It simply depends on the output from the model. It thus makes the technique fairly flexible and applicable to any range of models. The LIME idea aims to explain any prediction, as made by a complex model, such as a deep neural network, by using the explaining behavior of a simpler and more interpretable model locally, near a specific input it is interested in analyzing. 
+To do this LIME creates new samples in the neighborhood of the input of interest, evaluates them using the complex model, and then approximates the behavior of the model in that local region using a simple one that is comprehensible-a linear function, for example. That is, instead of explaining the prediction of the complex model directly, LIME explains the prediction of the simpler, surrogate model that closely approximates the behavior of the complex model for the input of interest. 
+The LIME strength is the ability to give clear, understandable explanations for individual predictions to the user in an easy-to-understand way. Its limitation, however, does not give a broader sense of how the model works at an overall level. Additionally, the explanation given might be rather simplistic and fails to reflect some of the more complex patterns of the decision-making process by the model.
+SHAP
+SHAP for Shapley Additive Explanations is the extension of Shapley values, first formulated to ensure equitable distribution of payouts in cooperative games, for explaining what a machine learning model predicts. As [52] stated, the SHAP works on an analysis of how changes in the input of each variable change the output of the model. The method takes an average contribution of the feature variables over all possible orderings of the variables. This approach hinges on f key principles efficiency, symmetry, dummy, and additivity which ensure the value assigned to each feature is fair and consistent. 
+The key advantage of SHAP is that it can be applied to give fair and consistent feature importance values not only individually for a single prediction but also to check overall behavior of the model. Explanation is based upon game theory, which keeps its contributions to feature's calculations well accurate and even. However, that applies only in the context of the exact computation of Shapley values, because that may often be very expensive in computations for larger data sets and more complicated models, leading to approximation or approximating methods. 
+2.11.2 Model-Specific Methods: 
+Model-specific approaches to explainable AI are more relevant because they provide insight relative to the architecture of some machine learning models to augment interpretability and transparency. It is different from a model-agnostic approach that can be applied on virtually any model. Besides, the model-specific technique in bioinformatics further proves to be necessary to handle a specific domain-related issue because of the transparency requirement especially in high-stakes applications such as health care [59]. Again, the selection of a technique depends upon the model complexity and specific interpretive requirements of users, which is further stated by different comparative studies on various XAI techniques [48][60]. Model-specific approaches therefore bridge the gap between complex AI systems and human understanding, making way for trust and accountability in AI usage. 
+Attention Mechanisms
+Model-specific techniques employed in explainable AI, or XAI, involve attention mechanisms. In many domains, they facilitate interpretability. The ESCOUTER model applies a slot-attention mechanism but one modified to include the intuitive explanations within classification scores; this makes clear reasoning behind decisions [48]. Similarly, the SNNA method of Smooth Noise Norm Attention addresses the problem of noise arising in attention-based explanations. The average gradients due to input perturbations are computed for producing a cleaner visual map in applications such as driving action prediction of [61]. Attention also helps in gaining insights into the behavior of the model, which helps in debugging and bias detection by [62]. The few-shot learning mechanism utilized hard attention finding through the FewXAT framework. Such mechanisms result in high model performance even with few samples [63]. The Graph Neural Networks finally used semantic attention to probe the significance of features. Attention weights equalled model accuracy; they can provide trustworthy explanations [64]. Generally, these mechanisms highlight the prospect of applying attention mechanisms to create transparency and trust in AI systems.
+Feature Importance 
+Model-specific explanations of AI, or Explainable AI (XAI), refer to explaining feature importance to enhance the confidence and transparency of complex systems of AI. There are many different methods of feature attribution such as SHAP to permutation importance. Although they are intended to reveal model predictions they work very differently depending on internal properties as well as situations of their application [65]. For instance, according to [66], in the BoCSoR approach, for high-dimensional data, notably fMRI signals, a collection of local counterfactual explanations are aggregated into more solid measures of global feature importance. This further points toward computational verification in the realm of the healthcare domain through showing how it would reflect the demand for customized forms of analytical techniques capable enough to gauge the correctness of XAI-based model evaluations along with proper explanatory powers relevant yet reliable simultaneously, as claimed by [67]. It involves the integration of model-specific methods into XAI for the resolution of ethical dilemmas and building trust from users in healthcare, financial, and other domains [60]. 
+Visualization Techniques 
+Model-specific XAI visualization techniques relate to techniques that make complex models, especially deep learning architectures, more interpretable. Visualization techniques in this class activate maps in CNN thus enabling an understanding of what parts of the image are responsible for a model's prediction, thereby enhancing applications of transparency, such as landscape classification [20]. Model-agnostic methods like LIME and SHAP will provide users with local and global explanations, respectively, through which feature importance and how decisions are made can be distinguished between models [58]. Salience maps combined with LIME and feature attribution increase model interpretability without a corresponding decrease in model performance when used in CNNs or transformers . This, and other similar techniques, instils trust in AI systems in general while functioning within critical domains whose nature of model working is extremely important [68]. 
+2.12 Use in Power Quality Monitoring Anomaly Detection
+ One would emphasize techniques that provide the best intuitive, actionable explanations on how the model would interpret the power data itself for effective power quality anomaly detection with XAI visualization. Feature importance plots and PDPs(Partial Dependence Plots) are suitable drivers to determine driving factors in their respective anomaly predictions. On detailed instance-level information understanding, LIME and counterfactual explanations would be great to use. The concept of saliency map application and decision trees fits very well in a temporal and/or multi-dimensional context. These techniques can be adapted and combined according to the needs for monitoring power quality, and applied by experts in the domain to make decisions. 
+Since XAI improves the interpretability and reliability in complex models applied to power quality anomaly detection, it is of great importance. Some recent researches have presented different AI techniques such as the Transformer-GAN model that has been up to 95.18% accuracy for the anomaly detection in power distribution systems with the ability to show resistance to dynamic data patterns [13]. Furthermore, autoencoder-based neural networks are used for the detection of power quality disturbances such as voltage sags and harmonics. They emphasize the urgent need to analyze large-scale time series data in real time. More recent GAN-based approaches were developed to face challenges about imbalanced multivariate time series data; in those approaches, the use of attention mechanisms can improve detection performance [69]. Such innovations underline the importance of XAI in ensuring the power systems remain stable and secure with respect to fault detection and proper implementation of mitigation strategies [70]. 
+
+
+2.13 XAI in Anomaly Detection
+2.13.1 Previous Research on the Integration of XAI into Anomaly Detection
+The integration of XAI in anomaly detection systems in previous studies focused on model interpretability and complexity. [71] demonstrated the SHAP technique of XAI to enhance the model transparency, explaining why the model came up with that output. The challenges the model encountered include the complexity of explaining the deep learning model decisions. Despite these challenges, there are also successes in implementing XAI in anomaly detection systems; the study of [72] in the Internet of Things (IoT) network anomaly detection achieved a 98% reduction in the model complexity without compromising the interpretability of the system. As the demand for transparency in AI systems grows, especially in critical sectors, especially in anomaly detection in power systems, the ongoing development of XAI methods like SHAP will be vital for fostering trust and accountability in AI applications. Integrating these methods can further enhance decision-making support in complex environments, ultimately leading to more robust and credible AI solutions. 
+2.13.2 Case Studies 
+ XAI has been successfully applied in specific fields of anomaly detection. The study of [73] proposes a log-based anomaly detection system using the Kernel SHAP approach to identify the features and causes of abnormal behavior in log data. With over 99% rate of the system in detecting the anomaly of log data. In addition to the above-mentioned study, [74] use the SHAP technique of XAI to integrate into the Advanced Driver Assistance System (ADAS). In addition, the study uses XGBoost since it has high accuracy in detecting anomalies; with this integration, the system provides transparency and reliability in the decision of the AI with high accuracy. These successes of the previous studies prove that XAI is essential in detecting anomalies since it provides transparency in the decision-making process. This transparency helps users understand how and why certain decisions are made. 
+2.13.3 Potential approaches 
+LIME and SHAP are prominent techniques of XAI that explain anomaly detection. A study by [75] utilizes a variational auto-encoder (VAE) with SHAP to explain anomalies in the industrial operation of IoT to construct long-term dependencies; the system offers valuable insights that can help stakeholders understand the reason behind anomalies within IIoT systems. In contrast, [76] use LIME to interpret the detection of fraud in credit cards. The main reason is that LIME is better at providing a clear decision, even when the details are small. Both approaches allow users to interpret model predictions. SHAP gives an overall view and provides local and global explanations, whereas LIME focuses locally on specific instance models [85]. 
+2.13.4 Improved interpretability  
+The integration of XAI in previous studies in anomaly detection enhances the model's interpretability, helping users interpret the model's output. In prior research, [77] presented a study combining decision-tree-based auto-encoder, LIME, and SHAP to improve the anomalies' interpretability. The proposed approach is widely used because it provides unsupervised learning, which does not require labeled data, which is crucial in scenarios where anomalies are rare or hard to label. According to [78], in detecting anomalies in Cyber-Physical Systems, combining the XAI and machine learning techniques provides a clear interpretation of the anomalies that are being detected. The study highlighted that ML-based random forest achieves better results than other anomaly detection methods. However, challenges arose in the previous study, as the complexity of models can lead to difficulties in generating clear and understandable results; by addressing these challenges, the model enhances clarity and improves decision-making outcomes.
+2.14 XAI-Based Anomaly Detection 
+Integrating XAI techniques can develop an inherently explainable new algorithm in Anomaly Detection. [79] proposed a general-purpose method for integrating XAI in anomaly detection. The study highlighted that the method based on Integrated Gradient yields achieves significantly lower attribution errors than alternative methods, emphasizing the importance of accurate explanations for anomaly detection. However, [80] noted that establishing practical evaluation is challenging because it involves thoughtful evaluation of the particular circumstances in which the AI model functions. [81] added that, without XAI metrics, the output does not accurately represent the model's decision; this means it will not provide meaningful insights to users. By addressing these challenges, the model will ultimately gain meaningful insights into anomaly detection, where users can trust the model. 
+2.15 XAI in Power Quality Monitoring
+2.15.1 Specific Challenges
+Complex Data Patterns Power quality data is often defined as nonlinear, complex, and temporally variable patterns, making it challenging for traditional AI models to interpret and predict accurately. Traditional models struggle to clarify the relationship between input features and model decisions in rapidly changing power conditions; these complex patterns complicate XAI's interpretability [82]. Moreover, [83] proposed a study that is a data-driven XAI model tailored for long-term power quality predictions involving feature decomposition, making the data patterns more interpretable while maintaining its performance. One of the strategies to address these challenges is using hybrid XAI models that combine deep learning with rule-based or statistical methods to break complex data into understandable patterns, [82].
+2.15.2 Real-Time Requirements 
+Real-time decision-making is crucial in power quality monitoring, especially when detecting system anomalies. [3] noted that the computational intensity of many XAI techniques hinders real-time processing. The study suggests balancing transparency and computational performance, combining a hybrid approach with interpretable yet lightweight models like decision trees and reinforcing learning. In addition, [77] use a Decision-Tree-Based Autoencoder, which is particularly effective in real-time anomaly detection. By learning the standard patterns in data, it can quickly identify if there are any anomalies in the system. Meanwhile, [84] conducted a study in which the anomaly detection model of Machine Learning has an accurate result in detecting anomalies in large sensor networks. The study concluded that the Isolation Forest is better than the other models, achieving an accuracy of 0.92 and a review of 0.88, while the Support Vector Machine, Local Outlier Factor, and Recursive Partitioning algorithms have lower accuracy and review in detecting anomalies. Utilizing XAI in real-time anomaly detection system allows the stakeholder for immediate feedback and action. This real-time capability is crucial in mitigating risk before they escalate into significant issues
+2.15.3 Privacy and Security Concerns 
+The information related to power quality is sensitive; thus, ensuring privacy and security is crucial when implementing explainable AI (XAI). [86] highlight the importance of Data Anonymization and encryption to protect sensitive data, which masks the Personal Identifiable Information(PII) to guarantee adherence to privacy laws and uphold user confidence that transforms into a coded format accessible only to authorized users. These address the dual challenge of utilizing data for AI modeling while managing privacy concerns. These safety measures of data promote ethical AI and create a secure environment for stakeholders. In Addition, the study of [87] applies the XAI technique in solar energy systems like SHAP and LIME, focusing on enhancing the interpretability of the ML model's interpretability, allowing stakeholders to understand predictions without exposing raw data. The study achieved data integrity and confidentiality by prioritizing transparency, minimizing data exposure risks, and addressing ethical and regulatory concerns in AI applications. 
+2.15.4 Fault Diagnosis 
+Integrating XAI techniques in power systems has demonstrated significant capability in diagnosing faults in power systems by offering clear insights into predicting and classifying faults. [3] demonstrate the application of the LSTM model in the detection of faults in power systems, which include generation tripping, line tripping, oscillation status, and load-shedding events, while the Deep SHAP method is applied for explaining the prediction of the model. Machine learning models are integrated with XAI techniques, including decision trees, GRUs, and XGBoost, to improve the interpretability of these models. The study of [88] implemented Explainable Artificial Intelligence (XAI) within the context of fault diagnosis in Photovoltaic (PV) systems to improve both the interpretability and the reliability of machine learning models utilized for detection purposes. Techniques associated with XAI, including Shapley Additive Explanations (SHAP), Anchors, and Diverse Counterfactual Explanations (DiCE), were employed to generate explanations for the predictions made by artificial neural networks (ANNs). In summary, the XAI technique will improve the transparency of the decision-making process in the power system because it provides valuable insights into various faults, which is essential for fostering trust in automated systems among operators and stakeholders. The system can rapidly identify faults by using real-time data analytics and machine learning algorithms, thus minimizing downtime and enhancing response strategies.
+2.16 Load Forecasting 
+Explainable Artificial Intelligence (XAI) is increasingly recognized due to its massive role in load forecasting in power quality systems. XAI serves as the tool of utmost importance to improve the explainability of load forecasting models with the transparent insights into the decision-making process of the system [89]. Despite all this, some challenges still arise with integrating XAI into load forecasting models, for example, the complexity of models makes them difficult to use in real-time scenarios for which speed is of importance [90]. Furthermore, if data quality needs to be more precise or even complete, then there might be a misinterpretation since the performance of XAI is dependent much on the input data quality [3]. However, opportunities for advancement are developed when combining XAI with advanced machine learning methods, such as deep learning and federated learning, for these create opportunities for improved forecasting accuracy while maintaining the interpretability of the system [91]. 
+2.17 State Estimation 
+Explainable Artificial intelligence has emerged as a valuable tool for clarifying the uncertainties associated with power system state estimation by providing insights into the data and model decisions. XAI techniques like Shapley values can be utilized to analyze the contribution of various input features to ensure the model's prediction accuracy and thereby highlight which measurements or parameters are most influential in determining state estimates [3]. This is particularly important in identifying measurements errors, parameters inaccuracies, and topology errors that can affect state estimation outcomes. The author added that various assumptions can sustain model development, such as linearity of relationships among variables and the availability of accurate measurements. XAI can clarify assumptions by allowing stakeholders to visualize how changes in input data affect outputs. The power system will gain better anomaly detection since XAI can make it easier to identify anomalies even if measurements deviate from expected patterns [92]. 
+2.18 Methods Used in Previous Studies
+2.18.1 Data Collection and Preprocessing
+Data collection and preprocessing of power quality data is comprised of quite several systematic approaches necessary for ensuring the integrity and usability of data. Possibly, data collection will be done using an integrated monitoring system of power quality with advanced technologies related to power communication and computer networks intelligent enough to extract some critical parameters, such as voltage drop and flicker components according to [93]. Data preprocessing relates to common data quality issues of noise, missing values, and outliers. Outlier removal, missing value imputation, and normalization techniques, such as Min-Max and Z-score normalization, are used to improve the quality of the data [94][95]. Other dimensionality reduction techniques are applied in an effort to prepare the datasets in the best way possible so that subsequent analyses are more efficient. These techniques integrate and are meant to not only prepare the data for analysis but also support the development of reliable decision-making frameworks in power quality management [96]. 
+2.18.2 Anomaly Detection
+Machine learning algorithms, including Decision Trees, Random Forests, Support Vector Machines (SVM), Isolation Forest, Neural Networks, and deep learning techniques including Long Short-Term Memory (LSTM) networks and Generative Adversarial Networks (GAN), form the basis of building anomaly detection models. [97] [98] [99]. The models' performance is assessed through accuracy, precision, recall, the F1 score, and a confusion matrix, mainly what aspect of the developed approach fits a dynamic dataset and that is more tolerant of class imbalance [100][21]. Comparative analysis, with major concentration on the relative strength and weakness of each algorithm is another major thrust on real-time applications such as monitoring network traffic and fraud detection in financial sectors . Further, hybrid approach in combining traditional machine learning techniques and deep learning method trends abound as methods to boost the robustness of anomaly detection systems across diverse domains such as cybersecurity and finance. 
+2.18.3 XAI Integration
+Most importantly, XAI methods integration into anomaly detection models is mainly done using the technique of SHAP. Conclusions by [72] state that it is indeed proven to be a powerful approach for explaining the contribution of various features in network traffic anomalies. This ensured the deep learning model gained more interpretability, while some of the traffic features could be intuitively understood from their impact on the results of the detection process. More than that, frameworks such as SXAD can apply the transformations based on Kernel SHAP to change the black-box models into more transparent systems; based on this, there is an improvement in trustworthiness and reliability in log anomaly detection [70]. Other XAI methods, such as LIME and attention mechanism, have also been studied as to how these may possibly improve model explainability in different environments, in this case, surveillance systems [75]. In general, all of these XAI techniques show how the combination of all of these enhances the performance of the model combined with an increase in accountability in detection anomalies processes. 
+2.18.4 Evaluation Metrics
+Evaluating Anomaly Detection Models and Efficacy of eXplainable Artificial Intelligence techniques depends on a set of appropriate context-dependent metrics in use. Such metrics include accuracy, precision, recall, F1-score, area under ROC curve AUC-ROC that are generally used in the evaluation process to check the capabilities of the model in doing an accurate anomaly detection of datasets [101]. Other than that, the SHAP (SHapley Additive exPlanations) algorithm was one of the stable approaches toward attributing the contribution of features to model predictions. It is, therefore worthily adaptable in various anomaly detection frameworks . The evaluation metrics will also have to be apposite depending on the nature and requirements of the task with a complete taxonomy, which can classify the metrics depending on their method of calculation and scenarios of application.  This approach is bringing model performance alongside interpretability, which is bringing forth innovation in anomaly detection and XAI methodologies [102]. 
+2.18.5 Ethical Considerations
+Ethical issues are a major concern in any research work, such as data mining, artificial intelligence, and education. Data privacy relates to the anonymization of the data while collecting informed consent and removal of personally identifiable information from it using strong anonymity techniques. This is observed in the current large language models and their associated artificial emotional intelligence systems[103] [104].Additional ethical concerns of algorithmic bias demand there must be transparency and accountability, and frameworks have been proposed to help rectify those biases and thereby enhance the level of trust of the users. For primary education, a fully comprehensive framework with involvement that ensures integration of protocols on privacy-preserving and measures of inclusivity has been proposed to allow for the proper deployment of AI systems [107]. Collectively, these papers give precedence to the principle that ethical frameworks need continuous review for balancing utility and privacy so as to ensure a responsible data landscape that strengthens societal values and respects individual rights [106]. 
+2.19 Conclusion 
+Summary of Key Findings The literature highlights significant trends in anomaly detection and explainable AI (XAI) for power quality monitoring. Traditional statistical methods are interpretable; however, they often struggle with the complexity of power-quality data. Meanwhile, machine learning anomaly detection approaches such as Decision Trees, Random forests, and Support Vector Machines (SVM) are best in supervised learning models. At the same time, the Isolation Forest, Neural Networks are better in unsupervised learning models, stand out in detecting anomalies with high accuracy, and are also effective in real-time detection. Deep learning models like Long Short-Term Memory (LSTM) networks, Autoencoders, and Generative Adversarial Networks (GAN) have proven to be more accurate but more complex in detecting anomalies. In providing insights into why such anomalies are being detected, XAI techniques like SHAP and LIME have been applied to improve the transparency and trust of these models. SHAP offers globally consistent explanations; it calculates each feature's average contribution across all possible feature combinations, making SHAP more reliable for consistent feature importance but computationally intensive. On the other hand, LIME focused on local explanations, providing clear and understandable individual predictions; however, it does not provide a more comprehensive understanding of how the model functions on a broader scale. Integrating XAI techniques in anomaly detection will provide greater transparency and interpretability of the power quality system; this allows the operators to understand the reasoning behind flagged anomalies. Ultimately, this enhances trust in power systems and enables faster, more informed decision-making, as stakeholders can see which features contributed to specific detections.
+Chapter 3 
+Methodology
+3.1         Introduction
+This section discusses the methods implemented in the integration of XAI into Cyber-Physical Anomaly Detection in Intelligent Sensor Networks for Power Quality Monitoring. This integration will add explainability and transparency to anomaly detection processes, making these anomalies understandable by explaining them with reasoning. By combining machine learning with visualization tools and rule-based frameworks, it will fill in the gap between the complex models and human understanding. This study aims to ensure anomaly detection is reliable by providing explainable insights to the decision-making process.
+3.2        Research Workflow
+Figure 3.1 displays the process flow for integrating Explainable AI (XAI) into anomaly detection for intelligent sensor networks.
+  
+
+Figure 3.1 Research Workflow
+
+
+  Figure 3.2 Anomaly Detection Stage
+3.3 Research Environment
+The environment of this study is based on the deployment of IoT-based sensor networks within selected areas in Cebu, Philippines. These selected areas have six different distribution utilities: the Visayan Electric Company (VECO), the Mactan Electric Company (MECO), the Cebu Electric Cooperative I (CEBECO I), the Cebu Electric Cooperative II (CEBECO II), the Cebu Electric Cooperative III (CEBECO III), and the Bantayan Island Electric Cooperative, Inc. (BANELCO). This research focuses on integrating Explainable AI (XAI) into the anomaly detection framework, in which this integration aims to provide transparent and interpretable insights into detected anomalies. The inputs for the anomaly detection would be data gathered by sensors across various areas, where the output would be integrated with the XAI in explaining trends, patterns, and root causes of anomalies. By this, it provides actionable insights, reducing the occurrence of power outages and enhancing power system performance.
+Table 3.1 shows the specific areas where the deployment of sensor networks takes place as follows:                                
+No.
+	Plus Codes
+	Locality
+	Coordinates
+	Type of Distribution Utilities
+	1.
+	QG3C+PCJ
+	Dalaguete, Cebu
+	9°45’15.6”N
+123°31’15.6”E
+	CEBECO
+I
+	2.
+	5P53+CQ7
+	San Fernando, Cebu
+	10°09’30.7”N
+123°42’16.0”E
+	VECO
+	3.
+	8X66+4JR
+	Lapu-Lapu City, Cebu
+	10°18’37.3”N
+123°57’41.4”E
+
+
+	MECO
+	4.
+	GP68+6VF
+	Balamban, Cebu
+	10°30’38.0”N
+123°43’01.8”E
+	CEBECO
+III
+	5.
+	3XC5+7M3
+	San Remigio, Cebu
+	11°04’14.3”N
+123°57’33.1”E
+	CEBECO
+II
+	6.
+	7PMW+JWJ
+	Madridejos, Cebu
+	11°17’02.7”N
+123°44’50.2”E
+	BANELCO
+	Table 3.1 Site Locations
+The research environment for this study satisfies all the conditions required for gathering and analyzing data concerning six selected specific areas in Cebu, Philippines, serviced by different distribution utilities. Their selection was based on observed outage conditions, such as unscheduled interruptions, scheduled outages, and preventive maintenance. These diverse variations of power outages provide a very extensive dataset for assessing the power system's performance and detecting power quality anomalies.
+1. Balud, Dalaguete, Cebu (CEBECO I)
+Balud was selected due to its frequent sudden interruptions, which highlight potential challenges in the reliability of CEBECO I's distribution network. This area allows real-time monitoring and analysis of power quality anomalies during unexpected outages. By identifying trends and patterns in outage occurrences, researchers can assess the utility's response to sudden interruptions and recommend improvements to enhance service reliability and customer satisfaction.
+2.South Poblacion, San Fernando, Cebu (VECO)
+South Poblacion faces a mix of unscheduled and scheduled interruptions lasting seconds to hours. The diversity provides critical information in assessing the reliability of VECO's distribution network. The power quality anomalies found in this subarea will be helpful in the evaluation of outage management strategies and maintenance practices. The insights obtained here are significant for understanding how both sudden and scheduled interruptions impact households and can be improved upon utility performance.
+3. Opon-Airport Road, Brgy. Pajo, Lapu-Lapu City (MECO)
+Opon-Airport Road sees fewer outages; generally, they last between 5 and 30 minutes. Although they happen less often, they still severely affect daily operations. The study area enables the analysis of anomalies causing power quality outages. MECO's maintenance process and its responses will be evaluated to effectively reduce downtime and promote service reliability.
+4. Baliwagan, Balamban, Cebu (CEBECO III)
+Baliwagan's outage time is either abrupt or scheduled, ranging from 1 to 2 hours. Interruptions here give some of CEBECO III's experiences conducting planned and unplanned outages. Thus, researchers can assess the utility's performance in outage management and make recommendations to ensure reliability and satisfy customers.
+5. Argawanon, San Remigio, Cebu. (CEBECO II)
+Argawanon also experiences preventive maintenance that leads to outages of 1 to 3 hours. These planned activities ensure the reliability of the CEBECO II distribution network. Analyzing power quality anomalies during planned outages may help researchers understand better their impacts on households and assess how these maintenance activities minimize unscheduled outages and enhance the general power quality.
+6. Purok Nokus, Sitio Centro, Malbago, Madridejos, Cebu (BANELCO). 
+Purok Nokus experiences scheduled preventive maintenance outages for a few hours to avoid more extended downtimes and minimize unscheduled interruptions. This substation affords the opportunity to analyze BANELCO's proactive maintenance strategy. Analyzing power quality anomalies during scheduled outages can give insights into how the utility effectively minimizes disturbances and maintains network stability.
+
+
+3.5 Hardware Design of IoT-Based Sensor Network
+Intelligent Sensor Networks are being distributed in selected areas of the province of Cebu, Philippines. The data gathered from these sensors will be used in the anomaly detection model, which XAI will then interpret to clarify the reasoning behind the model's decision. The primary objective is to provide clear explanations for detected anomalies, offering actionable insights for stakeholders. This approach not only identifies the frequency, duration, and patterns of power disturbances but also pinpoints areas for improvement and recommends targeted interventions to enhance service reliability.
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+Figure 3.3 Visualization of Sensor Network in a Household
+Below is the schematic diagram that illustrates the architecture of an Intelligent Sensor Network. The study utilizes the NodeMCU which manages the data flow between sensors and output devices. The essential components include the PZEM-004T sensor for measuring the voltage, current, frequency, power factor, and energy consumption; jumper wires for secure and flexible connections among the NodeMCU, sensors, and other components; and resistors to regulate the current flow, protect the components from damage, and ensure accurate signal transmission. This configuration allows for real-time collection of various parameters in anomaly detection for power systems in the selected household in Cebu Province. 
+
+
+
+
+  
+
+Figure 3.4 Schematic Diagram of the Sensor Network
+
+
+3.6 Parameters for Anomaly Classification
+3.6.1 Deployment of IoT-Based Sensor Network
+Deployment of the Intelligent Sensor Network in the gathering of data concerning the behavior of power systems is selection of appropriate sensors with the accuracy of measuring critical parameters of power systems. Installation of such sensors takes place at strategic points in the network to cover critical areas prone to anomalies. Sensors will need proper installation and calibration so that the data collected by the system for performance monitoring is reliable and accurate. In this way, the anomaly detection model will better be able to monitor the appearance of abnormal events within the grid.
+
+
+3.6.2 Data Acquisition
+For this study, anomalous data is collected from a collaborating group that monitors and detects anomalies in power systems using an Intelligent Sensor Network. The system stores data in Firebase Cloud Storage. The group performs real-time data processing, and while in the process of anomaly detection, the group sends pertinent data parameters for further analysis. All the data collected will include important parameters such as voltage, power, current, frequency, power factor, and status of anomaly. Moreover, these parameters are useful for knowing the condition it is in during interruption.
+1. Anomaly Status
+It indicates the data parameters have anomalies in parameters such as voltage, power, current, and even power factor. It is a signal that an anomaly exists, but it does not indicate the source of the anomaly or what kind of anomaly. The anomaly's status is essential in guiding the clustering methods to group the data into categories, such as normal or anomalous.
+2. Voltage
+Voltage measurements play an important role in determining the quality of power and anomaly determination such as sags or surges. It gives XAI the capacity to give context on why the anomaly happened. Without the voltage data, the system would not have enough information to interpret the anomalies accurately and would not have the capacity to take appropriate corrective action
+3. Power
+Power measurements are essential to monitor the energy loss in case of outages and irregular use. This data is important in identifying discrepancies that are important for XAI to explain their impact on the performance of the system. Proper measurements allow XAI to provide insight into inefficiencies, hence improving the reliability of the system. Power data is essential to draw actionable conclusions from anomalies detected.
+4. Current
+Current data provides insights into the flow of electricity through the system and is vital for understanding the operational status during detected anomalies. The measurement of current facilitates the explanation of the underlying causes that result in abnormal current flows, such as short circuits and overloads. Without the recording of current data, the system could not provide the context necessary to allow XAI to explain all root causes of anomalies at an adequate level of detail for usability in the analysis. Data of current is essential for providing elaborate, context-specific insights into system behavior during interruptions.
+5. Power Factor
+Power factor measurements reflect how efficiently the electricity is consumed and the quality of service consumers experience. A low power factor might reflect inefficiencies in the system, which might affect the reliability of the service. The clustering method detects variations in the power factor, while XAI explains the implication of these inefficiencies. This will severely limit the capability of XAI to detect and explain inefficiencies without power factor data, preventing appropriate assessments of system performance or strategies for improvement. Enhancements in service reliability and efficiency in the system call for power factor data.
+6. Frequency
+Frequency measurements are critical for power system stability and proper mutual synchronization among different parts of the power grid. These frequency measurements help determine frequency anomalies or deviations, such as frequency drops or rises, which could indicate load-balancing problems, generation problems, or instability in the grid. Frequency data offers much-needed context for XAI in diagnosing and explaining the causes of system disruptions, such as power surges or under-frequency conditions. Absence of frequency data may lead the system to interpret anomalies incorrectly or fail to give corrective actions where, in some systems, frequency variations considerably affect performance and safety.
+
+
+3.7 Software Design
+3.7.1 Login and Register page
+The login and register page assures secure and personal access for the customers. This acts as an entry point for customers to their personalized power quality data safely. The login page consists of the email and password of the customer to authenticate themselves. It ensures that only authorized customers can access their personalized data. The register page will be used by new customers to create a new account with name, email, password, and confirm password. Upon registering, a customer may login and start accessing data tailored for them.
+ Figure 3.5 Login Page
+The login page will consist of an input email field (1), input password field (2), a sign in button (3), and a sign up link (4). The (1) and (2) is an interactive text field where the user will have to input their email and password, the (2) field is masked when typed for enhanced security. The (3) is an interactive button whose function is that when clicked, the system will validate the credentials inputted by the user to grant or deny the access. If the user does not have their own account yet they can click the (4) button to redirect the user to the register page.
+
+
+Figure 3.6 Sign Up Page    
+The input name (5), input email field (6), input password field (7), and the input confirm password field (8) are interactable text fields, while the sign up button (9) is an interactive button. The (5), (6), (7), and (8) text fields are for user credentials and the (8) interactive text field is for confirming if the password inputted by the user is the same as inputted in the (7). The (9) is an interactive button that can be clicked if the user is finished inputting their credentials in the input text fields. When the (9) is clicked, it automatically registers credentials to the Firebase and redirects the user back to the login page.
+        3.7.2 Overview page
+        The overview page is the central hub of the dashboard, which gives a concise summary for the power quality monitoring of the individual households. This page provides real-time data on voltages by visualizing it in a graph. It also summarizes critical performance metrics like the number of outages, average downtime, the number of anomalies occurs, and the power quality status. It also contains an event log that lists the recent power quality disturbances, including voltage sags, swells, or interruptions, along with their frequency, duration, and the time of the last recorded event. 
+
+
+  
+
+Figure 3.7 Overview page
+The overview button (1) and data analysis button (2) is an interactive button that is clickable and will redirect it to its predefined page. The status report button (3) shows the explanation of every recorded anomalies locally. The summary report button (4) shows the overall contribution of each parameters and the total of disturbance occurrences. The icon and user credentials field (5) is a picture and label field for displaying the name of the user. The (1) redirects the user to the overview page and it is composed of a power quality status widget (6), number of interruption widget (7), duration of interruption widget (8), and number of anomalies widget (9), these widgets are for the summarization data. A voltage graph (10) is for the real time data of voltage in the household. The date filter (11) is designed to filter data based on date selected by user. The download button (12) is for downloading the data in file format in.xls file type. Event log (13) displays data in table formats. The interactable text field (13.1), search bar to search for the specific data that the user wants to know and filter dropdown field (13.2); it uses the user who filters the data by narrowing down the information obtained in the table.
+
+
+3.7.3 Historical data page
+The historical data page provides the customer with more detailed information of past power quality data, which enables in-depth data analysis in patterns, trends, and anomalies over time. This page will show all the recorded data in that span of time. This page is designed to give customers insights into how their household's power supply has performed historically, which can be critical for identifying recurring issues and understanding the overall reliability of the distribution system.
+  
+
+Figure 3.8 Data analysis page
+The page of data analysis holds historical data table (1), search bar (1.1), and filter drop-down field (1.2). The (1) will appear in form of a table, hence all data will be reflected as it is in the table. The (1.1) is meant to perform a search on the selected data that a user has an interest in exploring into, and the (1.2) will be needed to narrow down the range of data being presented.
+
+
+3.7.4 Status report
+The status report is where the interpretation of the anomalies. The drop down list (1) is where the utility distributor can be filtered. The download csv button (2) is to export the list of anomalies. The list of anomalies (4) below is where the data will be displayed. The view button (5) is to display the information about the particular anomaly. The button download pdf (7) is to export the information on that specific anomaly including the visuaslization. The local explanation (8) is where the features or parameters and their contribution is displayed. The close button (8.1) is to close the displayed information about the anomaly and return to the list of anomalies. The bar plot (8.2) is to show the contribution of each parameter on that specific anomaly. The next button (8.3) shows the next plot. The in-depth explanation (8.4) shows the explanation in a string form. The force plot (8.5) is to show the influence of features where visualization about how much each parameters drag the prediction away or into the predicted value and also shows the real data of each parameters. Figure 3.17 Status report page output shows the exported information in pdf form.
+
+
+
+
+
+
+
+
+  Figure 3.9 Status report page
+Figure 3.10 Status report page  
+  Figure 3.11 Status report page
+  Figure 3.12 Status Report Output
+
+
+3.8 Experimental Set-up
+        In this section, the experimental set-ups for testing interoperability of cyber-physical systems and artificial intelligence of things in power quality monitoring will be described. Sections will explain hardware set-up and software set-up along with transmission and analysis of data.
+
+
+3.8.1 Hardware Set-up
+        The sensor system is checked for visible damage and wear and tear before deployment; warming up the sensor to enable accurate readings. The sensor system is placed in the main line, before it goes into the main breaker of the house. Once we have confirmed that the installation is complete, we will calibrate the sensor system, which involves the setting up of a calibration system, checking the accuracy of reference standards, and gathering any necessary documentation or labels. The sensor system will be labeled with information such as its serial number, date of calibration, and the status of calibration. The records of the PZEM-004T sensor will then be updated with the new calibration information while the calibration points ensure the readings in the future to be accurate.  
+Figure 3.13 Hardware Set-up
+Figure 3.14 Hardware Process Flowchart  
+
+
+
+
+  Figure 3.15 Hardware Wifi and Database Connection Flowchart
+
+
+  Figure 3.16 Normal Operation Flowchart
+3.8.2 Software Set-up
+        The software will be processing, analyzing, and displaying power quality data that has been gathered from IoT-based sensors. It is responsible for data acquisition from the PZEM-004T sensor for real time measurements of voltage, power, current, frequency, power factor, and outage duration. The data will then be transmitted and stored in a centralized database in Firebase for data analysis. An AI-powered anomaly detection will be used to scan all the incoming data, identifying patterns that depart from the predetermined threshold single out power quality disturbances such as voltage sags, swells, and interruption. Thereafter, the processed data will be visualized into a dashboard which will then be hosted through web servers. The dashboard will contain an overview page, a login page, a register page, and finally a historical data page so that there is an opportunity for pattern and trend analysis. Using HTML, CSS, Javascript, and a backend Django framework, it will implement data analysis.
+Figure 3.17 Software Process Flowchart    
+Figure 3.18 Software Process Flowchart
+
+
+3.8.3 Data Transmission and Analysis Set-up
+        The data extracted from the PZEM-004T will be obtained with the ESP32 micro controller's help. This is done by making use of an external library provided by the sensor known as PZEM004Tv30.h for easy data extraction. The collected data will then be formatted to a JSON format, which can be standardized for uploading to the cloud storage for logging data. That data will then be streamed on a dashboard showing how the power quality in the household stands. The cloud storage data will be analyzed for anomalies; if an anomaly is detected, then the system will notify through notifications and also display a visual indicator in the dashboard, and it will be forwarded for further processing to the clustering model. 
+The clustering model identifies detected anomalies by similarities for the possible recognition of repeating patterns, and results are forwarded into the classification model to recognize categories of anomaly. This anomaly would be explained by XAI techniques such as Shapley values to provide transparent and interpretable insights into why a particular anomaly was classified in a specific way. Such an explanation will enable utility operators to understand why anomalies happen and what factors influence them.
+Results from the classification and interpretability using the Explainable AI techniques will be generated on the dashboard. This guarantees that utility operators get an end-to-end understanding of anomalies, classifications, and the impacts these could have on household power quality. This interactive dashboard is where the operators can interactively monitor the trends in power, understand details on anomalies, and take action toward efficient power management.
+
+
+  Figure 3.19 Data Transmission Flowchart
+
+
+
+
+3.8.4 Data Storage Set-up
+        The data gathered by sensor networks will be stored in the cloud storage server, Google's Firebase. This will serve as the system's database to log the data. The data transferred from the sensor network will include power quality parameters such as voltage, current, power, and power factor along with the information of time, date, and location of the node, where and when that power quality data was taken. Data will be stored in a JSON format, as it is the standard format  for most modern systems. Artificial intelligence models will use these data to analyze power quality anomalies. The website that will be used as the dashboard for this study will use the database as its source of data.
+3.8.5 String Explanation in Status Report[c]
+SHAP values measure the contribution of each feature in making the prediction. A positive value means it increases the prediction, and a negative value decreases it.
+Based on a configurable threshold for the |SHAP| values, feature filtering was carried out. Adjustments will be made during the implementation based on the distribution of SHAP values across features so that the most relevant contributors will be identified in the presence of variance in feature importance. Features are then ranked by absolute SHAP values to prioritize impactful contributors.
+For each prediction, explanations were generated detailing the role of significant features, highlighting their contribution magnitude and direction whether positive or negative while also including the real sensor value of the feature. These explanations are generated dynamically by a rule-based approach that adapts the language and structure to the specific features present in the prediction.
+String manipulation techniques will be used to generate explanations and form sentences that include names of features, SHAP values, and sensor values dynamically. This also means every explanation ends up being specific to the features at play and their contribution to some prediction.
+For instance, if Current and Power Factor are the significant features used by the model, then the explanation would be something like this:
+"The model predicts an output with a base value of 0.50. The most important features are 'Current' (SHAP = +0.80) with a value of 5A that increases the prediction, and 'Power Factor' (SHAP = -0.30), with a value of 0.95, that decreases the prediction."
+
+
+This sentence is flexible because the rule system can be developed to adapt with other features that may appear in a given prediction. The system dynamically populates the explanation with relevant feature names, SHAP values and sensor values, such that the explanation represents accurately the current context of the model's output.
+
+
+3.9 Firebase Realtime Database for IoT Data for Anomaly Detection
+Firebase's real-time database handles real-time data processing, providing efficient data management and enabling synchronization across connected devices. This capability of Firebase is necessary for real-time anomaly monitoring in IoT networks, such as identifying abnormal patterns in voltage, current, and frequency fluctuations and detecting power outages since it allows changes in sensors to be tracked instantly.
+Firebase's other key advantage is that it requires minimal maintenance and is scalable since it is cloud-hosted. Additionally, it uses a programmatic interface that allows users to use "reference" to access data, allowing efficient retrieval and organization of data. This is essential in anomaly detection since it enables quick access to relevant data.
+Another significant benefit is that it can easily integrate with other third-party tools, extending the system's functionality. It has offline capabilities to ensure data synchronization even during connectivity disruptions. This means that it facilitates advanced analysis, support machine learning models, reliable data collection, and makes the system accessible and manageable for stakeholders and utility distributors. 
+Firebase's real-time database is a powerful platform for real-time anomaly detection. It provides the necessary infrastructure for anomaly detection, which can be contextualized and analyzed promptly through XAI models, improving the power system's overall performance.
+3.10 Data Logger
+A reliable data logging system like a data logger is of great use for recording and storing data regarding anomalies. That data is necessary for effective detection of anomalies and for application of XAI techniques. If there is no reliable data logger, then unusual events may not be captured or may be captured wrongly, thereby giving the wrong data. This can impact the efficiency of anomaly detection and also the performance of XAI in giving reasonable explanations of the system's behavior.  
+
+
+Figure 3.20 Data Logger
+Figure 3.20 This illustrates a representation of a data logging system that involves anomaly detection and Explainable AI. The diagram starts by showing data collection from several sensors. These sensors are deployed within different areas to collect and monitor different data within the power system, including electrical parameters such as voltage, current, power, frequency, and power factor.
+
+
+After collection, the data is transmitted to the Firebase. It is a real-time database used in this research. Firebase acts as the central hub of data collected. The arrows of the diagram represent the data transmission process where information flows seamlessly from the sensor nodes to Firebase. When this information reaches Firebase, the data is securely stored within a cloud storage system, ensuring that all the data gathered is systematically organized and securely maintained for ready use in further analysis.
+From Firebase, the data is forwarded to an anomaly detection model. This component works on the data to extract anomalies or potential issues. Results are then forwarded to the Explainable AI (XAI) system. The XAI system interprets these anomalies, giving insights to their root causes and what may happen. This stage improves decision-making by providing explanations that are clear and actionable of complex patterns.
+Overall, the diagram of data logging represents an all-inclusive system that the sensor gathers data related to electrical parameters. From there, it sends these to Firebase and securely puts real-time updates into the cloud storage. Then an anomaly detection model for analysis accesses stored data. With the Explainable AI feature, detected anomalies are put into context so that these can be better understood. Then, remote access capabilities would make the system more flexible and usable. This setup offers a reliable, efficient, and scalable solution for the centralized collection of data and real-time monitoring of electrical systems.
+
+
+3.11 Training Duration[d]
+The data set is about energy parameters-voltage, current, and frequency-all recorded at about a second step for 1–3 months, resulting in millions to billions of rows of data. Because the data was simple and complete, no preprocessing was required. Models for training were unsupervised like K-means and Gaussian Mixture Models and supervised like Decision Trees, Random Forests, and Support Vector Machines. All of these models were trained on a standard laptop or desktop with average specifications. For datasets in the lower range (millions of rows), the training duration spanned 2–6 hours, while larger datasets (billions of rows) required 10–20 hours or more, depending on model complexity and optimization. This time frame was long enough for convergence of unsupervised models and the adequate evaluation of supervised learning models to yield robust and interpretable results for anomaly detection.
+
+
+
+
+3.12 Clustering Methods
+
+
+1. K-Means
+Anomaly detection in data through the power quality uses a K-means clustering algorithm on a data set of m observations holding m instances of numerical features like voltage, current, frequency, and other operational parameters. The objective is that by setting  divide the data into anomalous and non-anomalous clusters. The process involves initialization of cluster centroids, computation of Euclidean distance from each observation to the centroids, and then iteratively updating the centroids till they converge. This iteration allows clustering of historical unlabeled power quality data that can then be used to determine anomalies like abnormal voltage or current changes by distinguishing normal operating conditions from those that would indicate failure or malfunction.
+
+
+2. Spectral Clustering
+Initially, a similarity graph is constructed from the input power quality data, which comprises features such as voltage, current, and frequency. Then, the data is projected into a low-dimensional space where the clustering can be done. It starts with a high-dimensional space containing a set of data points. There, a matrix is formed that captures the dissimilarities between the data points. This dissimilarity matrix is then converted to a similarity matrix that shows the relationships between the data. Then, degree and Laplacian matrices are computed from which eigenvalues and eigenvectors are derived. Then, the k largest eigenvalues and their corresponding eigenvectors are used to construct a new matrix that is normalized in a standardized range. The k-dimensional space is finally clustered so that the data points fall into different clusters, which may identify normal and anomalous patterns in the power quality data.
+
+
+3. Ward Hierarchical Clustering
+Ward's Method is one of the algorithms used to apply hierarchical clustering for numerical variables. It is the most standard algorithm for ward hierarchical cluster. This method tries to reduce the increase in the total sum of squares within clusters when clusters merge. In the case of data like voltage, current, and frequency of power quality, it starts from the point that each single data point forms its separate cluster, so the within-cluster sum of squares will be zero at the initial stage. Then, progressively, the closest clusters merge in an attempt to minimize the increase of the within-cluster sum of squares at each step. This method provides a good tool for measuring the proximity between clusters, making it particularly valuable for datasets with complex power quality since relationships between features such as voltage, current, and frequency would need to be considered for discrimination between normal and anomalous patterns in data.
+
+
+4. Agglomerative Clustering
+The algorithm initially considers the power quality dataset to be presented with features including voltage, current, and frequency as an N number of individual clusters, considering each point as a cluster individually. For this, it calculates a distance matrix from all the clusters to compute a pairwise distance between all the elements using any chosen distance metric so that N×N matrix comes into action. The closest clusters are taken from the distance matrix, and merged together into one cluster. After every merge step, the distances between that newly formed cluster and all other remaining clusters are calculated again with a criterion of linkage. This procedure continues in an iterative manner until just one single cluster is left, making it possible to build a hierarchy from which interesting groups can be determined such as, for example, normal versus anomalous patterns in the power quality data.
+
+
+5. Gaussian Mixture Model
+It implements the GMM clustering algorithm using the expectation-maximization algorithm, iteratively updating the parameters with the power quality data. It starts to count the number of clusters. Each Gaussian distribution is characterized by parameters including its mean (μ), covariance (Σ), and weight (π). The algorithm calculates, in the E-step, the probability that a particular data point comes from a given Gaussian component through computation of posterior probabilities on the basis of the current parameters. The M-step then maximizes the expected log-likelihood computed in the E-step by updating the parameters: μ, Σ, and π. The iterative process stops when it has reached convergence. At convergence, the change in the parameters from one iteration to another is very small. GMM helps in modeling the distribution of power-quality data and distinct clusters identification, which may well mean separating normal operating conditions from anomalous patterns based on feature variations such as voltage and current.
+3.13 Possible Rules and Disturbances for Determining Labels for Clustered Data
+Disturbance
+	Key Parameters
+	Transient
+	Low voltage (< 207V)normal/moderate current, normal/slightly decreased power factor, typically stable (around 50 Hz or 60 Hz depending on the system)
+	Voltage Surge
+	High voltage (>253V), normal current, stable power factor, typically stable
+	Power Factor Issue
+	Low power factor (< 0.75), normal voltage and current, Stable
+	Blackout
+	No readings
+	Table 3.2 Rules for labeling clusters
+
+
+3.14 Evaluation Metrics
+To guarantee the effectiveness and performance of the clustering model, the model should undergo a comprehensive evaluation process. This involves evaluating the model using known datasets that contain labeled anomalies to measure its performance. Validation is important to verify that the model can reliably identify normal versus anomalous behaviors, thereby ensuring it yields trustworthy results in real-life scenarios. These metrics for evaluation include the Silhouette Coefficient Score, Davies-Bouldin Index, and Calinski-Harabasz Index [5]. 
+
+
+3.14.1 Silhouette Coefficient Score
+The Silhouette Coefficient Score is a crucial tool for evaluating a model’s prediction. This assessment measures how well the performance of the clustering model is. It provides valuable information about how close each point in one group is to the points in a neighboring group. As shown in the formula below:
+
+Where:
+* p is the average distance between clusters within a cluster.
+* q is the average distance to the nearest cluster.
+A high value of the Silhouette Score indicates that the cluster is meaningful and well-defined.
+
+
+3.14.2 Davies-Bouldin Index 
+The Davies-Bouldin Index is an essential metric to evaluate how compact and how well the clusters are separated. This metric assesses the quality of the clustering algorithms by calculating the average similarity of each cluster and its nearby cluster. As shown in the formula below:
+
+where 
+A higher score on the Davies-Bouldin Index means that the cluster is not well-separated or not compact. While a lower value indicates a better clustering quality, and it performs well. 
+
+
+3.14.3 Calinski-Harabasz Index
+The CHI provides a reliable and quantitative measure to evaluate and compare the quality of the clusters.  It evaluates the reliability of each cluster by comparing the average sum of squares within clusters and between clusters. As shown in the formula:
+  
+
+Where:
+* Bk is the trace of the between-cluster dispersion matrix.
+* Wk is the trace of the within-cluster dispersion matrix.
+* Nm is the total number of observations.
+* µe cluster centroid of all data points.
+A higher value of CHI indicates the improved performance of the clustering. This ensures the clusters are well-defined.
+Lastly, external evaluation will be performed to validate the result of the clustering by comparing it to the ground truth labels. In this study, the ground truth relates to the machine failure labeled in the data.
+
+
+3.15 Classification Methods
+        3.15.1 Decision Trees
+        Decision trees can effectively be applied for classifying data by recursively splitting data according to feature values and cluster labels assigned during the clustering procedure. After conducting an unsupervised clustering algorithm for example, K-Means, the obtained clusters act as pseudo-labels that mimic the presence of different classes such as normal vs anomalous. The decision tree learns to classify the data points into their respective groups or clusters based on the thresholds identified in the best separation of data given the features such as voltage, current, power, and power factor.
+
+
+At each split, the tree tries to maximize the purity by putting data points in the same class. The Purity is calculated with the help of Gini Impurity, which is given by:
+
+        Where G is the purity level which closer to 0 means a purer node, C is the number of classes, and pi indicates the proportion of samples in class i. Another method of determining the purity of data would be to calculate for Entropy:
+
+Where a smaller  value means a purer node.
+
+
+3.15.2 Logistic Regression
+        Logistic regression is a simple anomaly detection model that classifies values into normal(0) or anomalous(1). The binary classification of logistic regression fits perfectly on this study's anomaly detection functions. Logistic regression is represented as a sigmoid function as:
+
+In logistic regression,  is the probability that a data point  belongs to Cluster 1 (anomalous). This is computed using the sigmoid function, where  is the linear combination of features , weights , and bias . The sigmoid function transforms  into a probability, classifying the data point as normal or anomalous.
+
+
+3.15.3 Random Forest
+        Random Forest is very effective for classification problems because of its flexibility, robustness, and the ability to handle nonlinear relationships in data. This method is well suited for classifying data points into different categories, such as normal or anomalous, in applications like power quality monitoring. In classification, several decision trees are trained on the data and their predictions combined for accuracy. The final classification is decided based on aggregation of the output from each tree using the formula:
+
+Where  ​is the final prediction made by the random forest that determines whether it is an outlier, and Mode has defined the function that computes all the prediction made by , then identifies the most frequent output.
+
+
+3.15.4 Support Vector Machine (SVM)
+        SVMs are good for classification because they can model complex data and find the optimal decision boundary that distinguishes between different classes. For classification, SVM finds the best hyperplane that discriminates between classes, say normal and anomalous. SVM maximizes the margin between data points of each class, thus, it is capable of accurately classifying new data points into the correct category according to their position with respect to the hyperplane.
+
+Where   is the output of the computation that would determine whether or not the data is anomalous,  is the direction in which the plane is headed,  is the data points, in this case, the voltage readings. And  is the bias that splits normal data from anomalous data.
+
+
+3.15.5 Gradient Boosting Machine (GBM)
+        GBMs are well-suited to the task of classification problems, mainly due to complex relationship modeling ability, an imbalanced data handling aspect, and an overall strong accuracy for high applicability power quality monitoring among many such applications. Each subsequent new model improves over the past model that failed at different points for them. In classification, the steps begin as an initial prediction to update in each iteration toward better refining model predictions and improving classification accuracy.
+
+Where  is the initial prediction and   is the total number of samples. Following the calculation of the prediction, the gradient will be calculated, and it is formulated as:
+
+        Where the  represents gradient for -th sample, it means this is the error between model's prediction, and actual label. The  is predicted value after -th sample and the yi is actual value of the i-th sample. Gradient is responsible to guide the next iteration on corrections needed.
+The calculation of the next iteration is:
+
+
+
+Where  is the updated prediction after adding the -th sample. The  is the prediction from the previous sample.  is the learning rate where it controls how much influence each new tree has on the overall prediction.  is the prediction 
+The final prediction after adding all the trees is done with sigmoid transformation for the probability. The formula for flagging the anomalies:
+
+
+3.15.6 Multi-Layer Perceptron (MLP)
+MLPs are powerful, flexible, and adaptable classifiers that can learn complex, non-linear relationships between variables and handle high-dimensional data. Their flexibility, scalability, and deep learning capabilities make them highly applicable to classifying data in applications such as power quality monitoring. In an MLP, the output of each layer is calculated as:
+
+Here,  denotes the output of that node in the -th layer. The input feature has been denoted as . The weight associated with each connection from the previous layer is denoted by , and  denotes the bias term. Lastly, there is an activation function which is denoted by . In the output layer used for classification, applying the sigmoid function gives the probability calculated to classify the data into categories such as normal or anomalous.
+
+
+
+
+
+
+3.16 Shapley approach of Explainable AI
+The Shapley value is the most widely recognized approach to redistribute the worth of individual features in machine learning models. It offers a fair, transparent mechanism for assigning credit-or blame-to features used for predicting the model's output. This is especially apt for "black-box" models, like deep neural networks and ensemble methods, where interpretability is not always possible.
+From cooperative game theory, the Shapley value was formulated as providing a fair and just apportionment of an aggregate reward or cost. An aggregate reward or cost, in this cooperative game scenario, is apportioned according to a player's marginal contribution during some stage of attaining a common goal. The Shapley value is considered to be the most significant solution to the imputation problem. It is a fair solution as it considers all possible coalitions of players and their marginal contributions to the final outcome. Mathematically, the Shapley value for a player is given by:
+
+Where:
+*  is the Shapley value for player I,
+*  is the set of all players (features, in the context of machine learning),
+*  represents of a coalition of players,
+*  is the characteristic function that specifies the total payoff (or outcome) of coalition ,
+*  is the number of players in coalition ,
+*  is the total number of players, and
+* The term  measures the marginal contribution of player I to the coalition .
+This equation computes the weighted sum of a feature's marginal contributions across all possible coalitions, each being weighted by the probability of forming that coalition. In this sense, the Shapley value resulting is an equitable share of the total contribution.
+This framework is useful in machine learning in that it enables a value to be assigned for how much each feature is contributing to the model prediction. Each feature is thus viewed as a "player" and ensures that there will not be biased and skewed explanation of the decision of the model.
+In the paper, the SHAP framework will be integrated into an anomaly detection model to improve interpretation and transparency about the predictions associated with monitoring power quality. Once anomalies have been detected via machine learning algorithms like K-means or Gaussian Mixture Models, SHAP is deployed to calculate which feature such as voltage, current, or frequency affects how the model assigns a certain data point as anomalous. SHAP considers every possible combination of features so that each feature contributes in every scenario.
+Globally, SHAP identifies the most consistent features that are anomalies for all of the dataset, but locally, it provides explicit explanation for the anomaly detection in a specific instance. Overall, this integration makes it possible to enhance the model interpretability because stakeholders will easily understand why some anomalies have been flagged. This approach further enhance the trust factor in a model's decision and bring actionable insights for utility providers to refine the process of anomaly detection and eliminate false positives, which will increase the performance and reliability within the power system.
+
+
+3.17 Evaluation Metrics of Explanation
+A systematic evaluation of the explanations generated by Explainable Artificial intelligence (XAI) methods in anomaly detection for power systems will significantly enhance user trust and understanding. Operators can better assess the reliability of these systems if the model provides transparent and interpretable insights into how and why specific anomalies are detected. The decision-making of a model can directly impact infrastructure safety and operational efficiency; thus this transparency is crucial in power systems.
+A systematic approach to assessing explanations ensures that anomalies are accurately recognized and that the rationale for these identifications is well-documented and accountable.  In addition, evaluating explanations will help reduce false positives and continuously improve the anomaly detection process. 
+To assess the quality of these explanations effectively, the Shapash library in Python is being utilized by the researcher, for it provides valuable evaluation metrics such as Consistency, Stability, and Compactness [104].
+
+
+3.17.1 Consistency Metric
+The consistency metric assesses how similar the explanations generated by various explainability approach are for the same instance. When interpreting a model's predictions, this evaluates whether various methods produce comparable results. Explainable AI models need this metric since it is essential for building trust in the explanations offered. This can be also expressed in the formula below: 
+  
+
+(3.6)
+W1 and W2 signify the normalized vectors derived from the contributions of all features, and N refers to the number of instances utilized in the computation. 
+A high level of consistency suggests that various explainable AI methods agree on the importance of the features; this indicates a well-understood behavior of the model. While a low consistency means there is a significant difference in the explanations provided by various XAI model.
+
+
+
+
+3.17.2 Stability Metric
+The stability metric evaluates whether the explanations remain consistent when applied to data points that are similar in their feature values. A stable Explainable AI method suggests that minor changes in the input will not lead to significant changes in the explanations. This metric is crucial for building trust in the model's explanations. The stability is calculated by the formula of Coefficient of Variation (CV), which is shown below:
+
+(3.7)
+Where:
+   * The calculation of Standard Deviation of Normalized Vectors is by examining the contributions of features for an instance and its selected neighbors.
+   * The calculation of the Average of the Absolute Values of Normalized Vectors is to find the mean of the absolute contributions of the features for the same set.
+A highly stable method of Explainable AI shows that the model's behavior is predictable and that explanations are not exaggeratedly sensitive to minor changes in input, which is crucial for effectively communicating model predictions to operators. In contrast, a low, stable method means that similar instances (in terms of feature values and model predictions) produce different explanations. This indicates that the model is sensitive to small changes in input, suggesting that the decision is not well-defined.
+3.17.3 Compacity Metric
+The compacity metric evaluates the interpretability of Explainable AI techniques by assessing how well a small subset of features can represent a model’s predictions. This metric highlights the balance between simplicity and the accuracy of these predictions, as it helps the stakeholders to understand whether adequate explanations can be generated using a reduced set of features.
+
+(3.8)
+A high compacity indicates the explainable AI model can provide a clear and concise explanation, regardless of how small the number of features in the original model is. While a low compacity means the model requires a large number of features to approximate the model’s prediction correctly.
+
+
+
+
+3.17.4 Table for Shap Evaluation Metrics[e]
+Objectives
+	Methods
+	Outcome
+	Assess if the feature importance is reliable.
+	Consistency Metric
+The consistency metric in the Shapash library will be used to evaluate the reliability of the feature’s importance across different explainers from the SHAP explainers, such as Tree Explainer, Sampling Explainer, and Kernel Explainer. Each explainer calculates the Shapley values for the dataset, and the metric compares the feature importance rankings produced by each explainer to assess their agreement.
+	The consistency score is expressed as the distance between different explainers. If the distance is low between the explainers, it means the explainers agree on the calculated feature importance, which indicates that the feature importance is consistent and reliable across the different methods.
+	 Assess the stability of each feature. 
+
+
+	Stability Metric
+The stability metric in the Shapash library assesses the consistency of feature importance rankings by calculating the variance in rankings across different subsets of the dataset.
+	If the rankings produced by the explainer remain similar across various data subsets, the variance will be low, indicating stable feature importance. If the rankings differ significantly, the variance will be high, indicating instability in the feature importance across data subsets.
+	 Identifies whether a subset of features is sufficient to explain the model's behavior or if all features are needed.
+	Compacity Metric
+The Compacity Metric in the Shapash library will be used to evaluate if a small subset of features is sufficient to explain the model's decision-making process. By selecting the top features based on importance, we will measure how well they can approximate the model's output. The metric calculates the proportion of the model’s decision explained by this subset and compares it with the performance when all features are used. This allows us to determine if fewer features can provide a reliable explanation.
+	The Compacity Metric from Shapash visualizes the relationship between the number of features used and the proportion of the model's decision explained using the compacity plot method. The plot will show how much of the model’s behavior can be captured by different subsets of features. By looking at the graph, the minimum number of features needed to explain the behavior of the model can be determined. If the plot levels off after using only a few features, then a smaller subset is sufficient for a reliable explanation. If adding more features improves the explanation, then more features are necessary for a complete and accurate understanding of the model.
+	Table 3.3 Shap Evaluation Metrics Table
+
+
+
+
+
+
+
+
+
+
+References:
+[1] Phat, K., Huynh., Gurmeet, Singh., O., P., Yadav., Trung, Le., Chau, Le. (2024). Unsupervised Anomaly Detection in Electric Power Networks Using Multi-Layer Auto-Encoders. 1-6. doi: 10.1109/rams51492.2024.10457681
+[2] Y. Chen, X. Fan, R. Huang, Q. Huang, A. Li, and K. Guddanti, "Artificial Intelligence/Machine Learning Technology in Power System Applications (PNNL-35735)," Pacific Northwest National Laboratory, 2024. [Online]. Available: https://www.pnnl.gov/main/publications/external/technical_reports/PNNL-35735.pdf.
+[3] R. Machlev, L. Heistrene, M. Perl, K. Levy, J. Belikov, S. Mannor, and Y. Levron, "Explainable Artificial Intelligence (XAI) techniques for energy and power systems: Review, challenges and opportunities," Energy and AI, vol. 9, p. 100169, 2022, doi: 10.1016/j.egyai.2022.100169.
+[4] S. Hamida, N. Chakraborty, S. Sami, K. Biswas, and M. Chowdhury, "Exploring the Landscape of Explainable Artificial Intelligence (XAI): A Systematic Review of Techniques and Applications," Big Data and Cognitive Computing, vol. 8, no. 11, p. 149, 2024, doi: 10.3390/bdcc8110149.
+[5] Antolijao, T. D., Mayol, S. C., Canencia, R. F., Caparroso, D. E., Patunob, M. V., Pepino Jr, M. W., Miraballes, J. A., & Jueco, J. C. (2024). Performance analysis of multi-feature data-to-image encoding across different clustering methods for labeling anomalous machine data under predictive maintenance. IEEE. 
+[6] Husnara, Khan., Daljeet, Kaur. (2024). Cyber-physical systems. 213-229. doi: 10.58532/nbennurch188
+[7] Sindhu, Rajendran., SRI, RAM, CHANDRA, MURTHY, P.., Sree006Eivasulu, Reddy, Reddy, L., N., Ramavenkateswaran. (2024). Cyber-Physical System: Advances and Applications in Cyber Security. 106-133. doi: 10.2174/9789815223286124010007
+[8] S, J, Rudresha., Gopinath, Harsha, R., Kiran, Kumar, G, R., S, Shruthi., S., Kalpana. (2024). A cyber–physical systems perspective on smart grids. 38-48. doi: 10.58532/v3bgai10p1ch4
+[9] Iswarya., K., Manikandan. (2024). Algorithms for Fault Detection and Diagnosis in Wireless Sensor Networks Using Deep Learning and Machine Learning - An Overview. 1404-1409. doi: 10.1109/iccsp60870.2024.10543904
+[10] Xiaolu, Zhang., Lei, Cui. (2024). Design of Network Data Monitoring and Control System Based on Internet of Things Technology. 1-7. doi: 10.1109/icicacs60521.2024.10498397
+[11] Senthil, Kumar, J., Mr., Ganeshkumar, L., Dharanidharan, S., Sowndaryalakshmi, S. (2023). Power quality monitoring for industrial load. Indian Scientific Jnal Of Research In Engineering And Management, doi: 10.55041/ijsrem26001
+[12] SangWoo, Park., Amritanshu, Pandey. (2024). Anomaly Detection in Power Grids via Context-Agnostic Learning. arXiv.org, abs/2404.07898 doi: 10.48550/arxiv.2404.07898
+[13] Jing, Duan. (2024). Deep learning anomaly detection in AI-powered intelligent power distribution systems. Frontiers in Energy Research, doi: 10.3389/fenrg.2024.1364456
+[14] Bixuan, Gao., Xiangyu, Kong., Shangze, Li., Yi, Chen., Xiyuan, Zhang., Ziyu, Liu., Weijia, Lv. (2024). Enhancing anomaly detection accuracy and interpretability in low-quality and class imbalanced data: A comprehensive approach. Applied Energy, doi: 10.1016/j.apenergy.2023.122157
+[15] Kimleang, Kea., Youn-soon, Han., Tae-Kyung, Kim. (2023). Enhancing anomaly detection in distributed power systems using autoencoder-based federated learning. PLOS ONE, 18 doi: 10.1371/jnal.pone.0290337
+[16] Nah, Alangari., Mohamed, El, Bachir, Menai., Hassan, Mathk., Ibrahim, Almosallam. (2023). Exploring Evaluation Methods for Interpretable Machine Learning: A Survey. Information, doi: 10.3390/info14080469
+[17] XinJihong, Wei., Abdeljelil, Chammam., Jianqin, Feng., Abdullah, Alshammari., Kian, Tehranian., Nisreen, Innab., Wejdan, Deebani., Meshal, Shutaywi. (2024). Power System Monitoring for Electrical Disturbances in Wide Network Using Machine Learning. Sustainable Computing: Informatics and Systems, doi: 10.1016/j.suscom.2024.100959
+[18] A. Nascita, R. Carillo, F. Giampetraglia, A. Iacono, V. Persico and A. Pescapé, "Interpretability and Complexity Reduction in Iot Network Anomaly Detection Via XAI," 2024 IEEE International Conference on Acoustics, Speech, and Signal Processing Workshops (ICASSPW), Seoul, Korea, Republic of, 2024, pp. 325-329, doi: 10.1109/ICASSPW62465.2024.10626031.
+[19] Amit, Singhal., Preksha, Pratap., Krishna, Kant, Dixit., Kajol, Kathuria. (2024). Advancements in Explainable AI: Bridging the Gap Between Model Complexity and Interpretability. 675-680. doi: 10.1109/icdt61202.2024.10489277
+[20]A. Sharma and S. Khanna, "Anomaly detection using modified linearity-based grey swarm optimization algorithm and efficient hyperparameter optimization techniques," Social Informatics Jnal, vol. 3, no. 1, pp. 65–84, 2024, doi: 10.58898/sij.v3i1.65-84.
+[21]H. Patil, Swati, H. C. Sudheendramouli, K. Pratyush, S. Parikh and R. K. Vishwakarma, "Algorithms for Detection of Anomalies in Data From Clinical Studies and Medical Registries," 2024 International Conference on Intelligent Systems for Cybersecurity (ISCS), Gurugram, India, 2024, pp. 1-7, doi: 10.1109/ISCS61804.2024.10581281.
+[22] I. A. Altayara, Y. B. Salamah and E. A. Al-Ammar, "Power Quality Disturbance Detection using Autoencoder Neural Network," 2023 4th International Conference on Communications, Information, Electronic and Energy Systems (CIEES), Plovdiv, Bulgaria, 2023, pp. 1-4, doi: 10.1109/CIEES58940.2023.10378776.
+[23]K. Saleem, B. Alkan and S. Dudley-McEvoy, "Data Driven Machine Learning Model for Condition Monitoring and Anomaly Detection in Power Grids," 2023 IEEE Power & Energy Society General Meeting (PESGM), Orlando, FL, USA, 2023, pp. 1-5, doi: 10.1109/PESGM52003.2023.10253147.
+[24]R. Nayak and J. Chaudhari, "Anomaly detection using deep learning-based model with feature attention," IAES International Jnal of Artificial Intelligence (IJ-AI), vol. 13, no. 1, pp. 383–390, 2024, doi: 10.11591/ijai.v13.i1.pp383-390.
+[25] Roberto, Blanco., Pedro, Malagón., Samira, Briongos., José, M., Moya. (2019). Anomaly Detection Using Gaussian Mixture Probability Model to Implement Intrusion Detection System. 11734:648-659. doi: 10.1007/978-3-030-29859-3_55
+[26]Juan, J., Flores., Felix, Calderon., Anastacio, Antolino., Juan, Manuel, Garcia, Garcia. (2015). Network anomaly detection by continuous hidden markov models: An evolutionary programming approach. 19(2):391-412. doi: 10.3233/IDA-150722
+[27]G., Sandhya, Madhuri., M., Usha, Rani. (2020). Statistical Approaches to Detect Anomalies. 499-509. doi: 10.1007/978-981-15-0135-7_46
+[28]J. Guo and B. Nie, "Data Anomaly Detection in Power System State Estimation Based on Support Vector Machine," 2024 5th International Conference on Mechatronics Technology and Intelligent Manufacturing (ICMTIM), Nanjing, China, 2024, pp. 407-411, doi: 10.1109/ICMTIM62047.2024.10629376.
+[29]M. Ganjkhani and M. Parvania, "Machine Learning Approaches in Anomaly Type Detection and Localization in Distribution System," 2023 IEEE PES GTD International Conference and Exposition (GTD), Istanbul, Turkiye, 2023, pp. 268-272, doi: 10.1109/GTD49768.2023.00077.
+[30] Z. Jiang, "A comparative evaluation of machine learning algorithms for network anomaly detection," Applied and Computational Engineering, vol. 19, pp. 234–240, 2023, doi: 10.54254/2755-2721/19/20231038.
+[31] Syed, Muzamil, Basha., Dharmendra, Singh, Rajput. (2019). Survey on Evaluating the Performance of Machine Learning Algorithms: Past Contributions and Future Roadmap. 153-164. doi: 10.1016/B978-0-12-816718-2.00016-6
+[32] A. Ali, R. Jayaraman, E. Azar, and M. Maalouf, "A comparative analysis of machine learning and statistical methods for evaluating building performance: A systematic review and future benchmarking framework," Building and Environment, vol. 252, p. 111268, 2024, doi: 10.1016/j.buildenv.2024.111268.
+[33] Li, Eckart., Sven, Eckart., Margit, Enke. (2021). A brief comparative study of the potentialities and limitations of machine-learning algorithms and statistical techniques. 266:02001-. doi: 10.1051/E3SCONF/202126602001
+[34] Luay Ibrahim Khalaf, Baydaa Alhamadani, Omar Ayad Ismael, Ahmed A. Radhi, Saadaldeen Rashid Ahmed, and Sameer Algburi. 2024. Deep Learning-Based Anomaly Detection in Network Traffic for Cyber Threat Identification. In Proceedings of the Cognitive Models and Artificial Intelligence Conference (AICCONF '24). Association for Computing Machinery, New York, NY, USA, 303–309.
+[35] M.-C. Lee, "Impact of Recurrent Neural Networks and Deep Learning Frameworks on Real-time Lightweight Time Series Anomaly Detection," arXiv, arXiv:2407.18439, 2024. [Online]. Available: https://arxiv.org/pdf/2407.18439.
+[36] P. Kandasamy, C. Kumar, M. Lakshmanan, S. Jaisiva, A. A. Stonier, and G. Peter, "Initial condition based real-time classification of power quality disturbance using deep convolution neural network with bidirectional long short-term memory," IET Generation, Transmission & Distribution, 2023, doi: 10.1049/gtd2.13026.
+[37]F. Saeed, S. Aldera, M. Alkhatib, A. A. Al-Shamma’a, and H. M. Hussein Farh, "A data-driven convolutional neural network approach for power quality disturbance signal classification (DeepPQDS-FKTNet)," Mathematics, vol. 11, no. 23, p. 4726, 2023, doi: 10.3390/math11234726.
+[38] Avraam, Tsantekidis., Nikolaos, Passalis., Anastasios, Tefas. (2022). Recurrent neural networks. 101-115. doi: 10.1016/b978-0-32-385787-1.00010-5 https://doi.org/10.1145/3660853.3660932
+[39] Dar, Hung, Chiam., King, Hann, Lim., Kah, Haw, Law. (2022). LSTM power quality disturbance classification with wavelets and attention mechanism. Electrical engineering, 105(1):259-266. doi: 10.1007/s00202-022-01667-5
+[40] Mohammad, Mohammadi., Mousa, Afrasiabi., Shahabodin, Afrasiabi., Benyamin, Parang. (2019). Detection and Classification of Multiple Power Quality Disturbances based on Temporal Deep Learning. 1-5. doi: 10.1109/EEEIC.2019.8783378
+[41]Proceedings Volume 13180, International Conference on Image, Signal Processing, and Pattern Recognition (ISPP 2024). (2024). 131803K. https://doi.org/10.1117/12.3034346
+[42]B. Vaz and Á. Figueira, "GANs in the panorama of synthetic data generation methods: Application and evaluation: Enhancing fake news detection with GAN-generated synthetic data," ACM Trans. Multimedia Comput. Commun. Appl., vol. 0, no. ja, 2024, doi: 10.1145/3657294.
+[43]Abheejeet, Mohapatra., Abhijeet, Kumar., Bimlesh, Kumar., Harish, Agarwal., Rojalina, Priyadarshini. (2024). Synthetic Data Generation and Handling Data Imbalance for Mobile Financial Transactions. doi: 10.1109/csnt60213.2024.10546178
+[44] Y. Liu, S. Wang, S. He, and Z. Li, "An ensemble learning method with GAN-based sampling and consistency check for anomaly detection of imbalanced data streams with concept drift," PLOS ONE, vol. 19, 2024, doi: 10.1371/jnal.pone.0292140.
+[45] Y. Gao et al., "Drift-aware Anomaly Detection for Non-stationary Time Series," 2023 IEEE International Conference on Big Data (BigData), Sorrento, Italy, 2023, pp. 1095-1100, doi: 10.1109/BigData59044.2023.10386160.
+[46] P. Khetarpal, N. Nagpal, H. H. Alhelou, P. Siano, and M. S. Al-Numay, "Noisy and non-stationary power quality disturbance classification based on adaptive segmentation empirical wavelet transform and support vector machine," Comput. Electr. Eng., vol. 118, p. 109346, 2024, doi: 10.1016/j.compeleceng.2024.109346.
+[47] M. Wadinger and M. Kvasnica, "Adaptable and interpretable framework for anomaly detection in SCADA-based industrial systems," Expert Systems with Applications, vol. 246, p. 123200, 2024, doi: 10.1016/j.eswa.2024.123200.
+[48] Z. Wang, X. Luo, E. Song, Q. Bai, and F. Lin, "Imbalanced graph-level anomaly detection via counterfactual augmentation and feature learning," in Proc. 36th Int. Conf. Scientific and Statistical Database Management (SSDBM '24), 2024, pp. 1–12, doi: 10.1145/3676288.3676292.
+[49] L. Xue and T. Zhu, "Hybrid resampling and weighted majority voting for multi-class anomaly detection on imbalanced malware and network traffic data," Eng. Appl. Artif. Intell., vol. 128, p. 107568, 2024, doi: 10.1016/j.engappai.2023.107568.
+[50] N. Matar, B. Sowan and A. Al-Jaber, "Evaluating Models Performance for Credit Risk Detection for Imbalanced Data," 2024 2nd International Conference on Cyber Resilience (ICCR), Dubai, United Arab Emirates, 2024, pp. 1-6, doi: 10.1109/ICCR61006.2024.10532912.
+[51 ]R. S. Deshpande and P. V. Ambatkar, "Interpretable deep learning models: Enhancing transparency and trustworthiness in explainable AI," in Proc. Int. Conf. Science and Engineering, 2024, doi: 10.52783/cienceng.v11i1.286.
+[52]A. Holzinger, R. Goebel, R. Fong, T. Moon, K.-R. Müller, and W. Samek, xxAI - Beyond Explainable AI: International Workshop, Held in Conjunction with ICML 2020, July 18, 2020, Vienna, Austria, Revised and Extended Papers, Springer International Publishing, 2022, doi: 10.1007/978-3-031-04083-2.
+[53] Li, X. (2021). Interpretable deep learning: Interpretation, interpretability, trustworthiness, and beyond (arXiv:2103.10689). Retrieved from https://arxiv.org/abs/2103.10689
+[54] P. Gohel, P. Singh, and M. Mohanty, "Explainable AI: Current status and future directions," IEEE Access, vol. 9, pp. 1–13, 2021, doi: 10.1109/ACCESS.2017.DOI.
+[55] S. Ali, T. Abuhmed, S. El-Sappagh, K. Muhammad, J. M. Alonso-Moral, R. Confalonieri, R. Guidotti, J. Del Ser, N. Díaz-Rodríguez, and F. Herrera, "Explainable artificial intelligence (XAI): What we know and what is left to attain trustworthy artificial intelligence," Inf. Fusion, vol. 99, p. 101805, 2023, doi: 10.1016/j.inffus.2023.101805.
+[56]A. K. Gizzini, "Explainable AI for enhancing efficiency of DL-based channel estimation," arXiv, arXiv:2407.07009, 2024. [Online]. Available: https://arxiv.org/abs/2407.07009.
+[57] R. S. Deshpande and P. V. Ambatkar, "Interpretable deep learning models: Enhancing transparency and trustworthiness in explainable AI," Ciencia e Ingeniería, vol. 11, no. 1, 2023, doi: 10.52783/cienceng.v11i1.286.
+[58] R. Shah, A. Pawar, and M. Kumar, "Enhancing Machine Learning Model Using Explainable AI," in Advances in Data and Information Sciences, S. Tiwari, M. C. Trivedi, M. L. Kolhe, and B. K. Singh, Eds., vol. 796, Lecture Notes in Networks and Systems, Springer, Singapore, 2024, doi: 10.1007/978-981-99-6906-7_25.
+[59] M. R. Karim, T. Islam, M. Shajalal, O. Beyan, C. Lange, M. Cochez, D. Rebholz-Schuhmann, and S. Decker, "Explainable AI for Bioinformatics: Methods, Tools and Applications," Brief. Bioinform., vol. 24, no. 5, pp. 1-12, Sep. 2023, doi: 10.1093/bib/bbad236.
+[60] P. Zodage, H. Harianawala, H. Shaikh, and A. Kharodia, "Explainable AI (XAI): History, basic ideas and methods," Int. J. Adv. Res. Sci. Commun. Technol., vol. 4, no. 1, pp. 1–10, 2024, doi: 10.48175/IJARSCT-16988.
+[61] J. Zou and O. Petrosian, "Explainable AI: Using Shapley Value to Explain Complex Anomaly Detection ML-Based Systems," 2020.
+[62] N. El Houda Dehimi and Z. Tolba, "Attention Mechanisms in Deep Learning : Towards Explainable Artificial Intelligence," 2024 6th International Conference on Pattern Analysis and Intelligent Systems (PAIS), EL OUED, Algeria, 2024, doi: 10.1109/PAIS62114.2024.10541203.
+[63] B. Nikp and N. Armanfard, "Explainable Attention for Few-shot Learning and Beyond," arXiv, abs/2310.07800, 2023. [Online]. Available: https://www.doi.org/10.48550/arxiv.2310.07800.
+[64] E. Panagiotaki, D. De Martini and L. Kunze, "Semantic Interpretation and Validation of Graph Attention-Based Explanations for GNN Models," 2023 21st International Conference on Advanced Robotics (ICAR), Abu Dhabi, United Arab Emirates, 2023. doi: 10.1109/ICAR58858.2023.10406370.
+[65] H. Mandler and B. Weigand, "A review and benchmark of feature importance methods for neural networks," ACM Comput. Surv., vol. 56, no. 12, Art. 318, Dec. 2024, doi: 10.1145/3679012.
+[66] A. L. Alfeo, A. G. Zippo, V. Catrambone, M. G. C. A. Cimino, N. Toschi, and G. Valenza, "From local counterfactuals to global feature importance: efficient, robust, and model-agnostic explanations for brain connectivity networks," Comput. Methods Programs Biomed., vol. 236, p. 107550, 2023, doi: 10.1016/j.cmpb.2023.107550.
+
+
+[67] S. P. Erdeniz, et al., "Computational Evaluation of Model-Agnostic Explainable AI Using Local Feature Importance in Healthcare," in Artificial Intelligence in Medicine, J. M. Juarez, M. Marcos, G. Stiglic, and A. Tucker, Eds., vol. 13897, Lecture Notes in Comput. Sci., Springer, Cham, 2023, doi: 10.1007/978-3-031-34344-5_14.
+
+
+[68] M. Landt-Hayen, “Exploring Methods of Explainable AI: Data-driven Attribution of Climate Events,” Self-Publishing of Department of Computer Science, Kiel, 2023. doi: 10.21941/kcss/2023/5.
+
+
+[69] J. Huang, C. Liu, Y. Yang and Y. Liu, "A GAN-Based Power Quality Anomaly Detection Method for Imbalanced Multivariate Time Series," 2023 IEEE 6th International Conference on Computer and Communication Engineering Technology (CCET), Beijing, China, 2023, doi: 10.1109/CCET59170.2023.10335146.
+[70] M. S. Sakib, M. R. Islam, S. M. S. H. Tanim, M. S. Alam, M. Shafiullah and A. Ali, "Signal Processing-based Artificial Intelligence Approach for Power Quality Disturbance Identification," 2022 International Conference on Advancement in Electrical and Electronic Engineering (ICAEEE), Gazipur, Bangladesh, 2022, doi: 10.1109/ICAEEE54957.2022.9836389.
+[71] M. K. Hooshmand, M. D. Huchaiah, A. R. Alzighaibi, H. Hashim, E.-S. Atlam, and I. Gad, "Robust network anomaly detection using ensemble learning approach and explainable artificial intelligence (XAI)," Alexandria Eng. J., vol. 94, pp. 120–130, 2024, doi: 10.1016/j.aej.2024.03.041.
+[72] A. Nascita, R. Carillo, F. Giampetraglia, A. Iacono, V. Persico, and A. Pescapè, "Interpretability and Complexity Reduction in IoT Network Anomaly Detection via XAI," in Proc. ICASSPW, 2024, pp. 325-329, doi: 10.1109/icasspw62465.2024.10626031.
+[73] K. Alam, K. Kifayat, G. A. Sampedro, V. Karovič and T. Naeem, "SXAD: Shapely eXplainable AI-Based Anomaly Detection Using Log Data," in IEEE Access, vol. 12, pp. 95659-95672, 2024, doi: 10.1109/ACCESS.2024.3425472.
+[74] T. J. Chengula, J. Mwakalonge, G. Comert, M. Sulle, S. Siuhi, and E. Osei, "Enhancing advanced driver assistance systems through explainable artificial intelligence for driver anomaly detection," Machine Learn. Appl., vol. 17, p. 100580, 2024, doi: 10.1016/j.mlwa.2024.100580.
+[75]Q. Liu and M. Khalil, "Explainable AI in Learning Analytics: Improving Predictive Models and Advancing Transparency Trust," 2024 IEEE Global Engineering Education Conference (EDUCON), Kos Island, Greece, 2024, pp. 1-7, doi: 10.1109/EDUCON60312.2024.10578733.
+[76] Y. Wu, H. -N. Dai and H. Tang, "Graph Neural Networks for Anomaly Detection in Industrial Internet of Things," in IEEE Internet of Things Jnal, vol. 9, no. 12, pp. 9214-9231, 15 June15, 2022, doi: 10.1109/JIOT.2021.3094295.
+[77]D. L. Aguilar, M. A. Medina-Pérez, O. Loyola-González, K. -K. R. Choo and E. Bucheli-Susarrey, "Towards an Interpretable Autoencoder: A Decision-Tree-Based Autoencoder and its Application in Anomaly Detection," in IEEE Transactions on Dependable and Secure Computing, vol. 20, no. 2, pp. 1048-1059, 1 March-April 2023, doi: 10.1109/TDSC.2022.3148331
+[78] S. K. Hussein and M. A. El-Dosuky, "Anomaly detection in cyber-physical systems using explainable artificial intelligence and machine learning," J. Theor. Appl. Inf. Technol., vol. 101, no. 8, pp. 3138–3150, 2023.
+[79] J. Sipple and A. Youssef, "A general-purpose method for applying explainable AI for anomaly detection," in Foundations of Intelligent Systems, M. Ceci, S. Flesca, E. Masciari, G. Manco, and Z. W. Raś, Eds., vol. 13515, Lecture Notes in Comput. Sci., Springer, Cham, 2022, doi: 10.1007/978-3-031-16564-1_16.
+[80] A. Barbado and Ó. Corcho, "Interpretable machine learning models for predicting and explaining vehicle fuel consumption anomalies," Eng. Appl. Artif. Intell., vol. 115, p. 105222, 2022, doi: 10.1016/j.engappai.2022.105222.
+[81] U. Do, L. Lahesoo, R. M. Carnier and K. Fukuda, "Evaluation of XAI Algorithms in IoT Traffic Anomaly Detection," 2024 International Conference on Artificial Intelligence in Information and Communication (ICAIIC), Osaka, Japan, 2024, pp. 669-674, doi: 10.1109/ICAIIC60209.2024.10463357.
+
+
+[82] K. Zhang, J. Zhang, P. -D. Xu, T. Gao and D. W. Gao, "Explainable AI in Deep Reinforcement Learning Models for Power System Emergency Control," in IEEE Transactions on Computational Social Systems, vol. 9, no. 2, pp. 419-427, April 2022, doi: 10.1109/TCSS.2021.3096824.
+[83] D. Chakraborty, A. Alam, S. Chaudhuri, H. Başağaoğlu, T. Sulbaran, and S. Langar, "Scenario-based prediction of climate change impacts on building cooling energy consumption with explainable artificial intelligence," Appl. Energy, vol. 291, p. 116807, 2021, doi: 10.1016/j.apenergy.2021.116807.
+[84] R. Rawat, K. AL-Attab, K. K. Dixit, A. Deepak, G. Pushkarna and M. Harikrishna, "Real-Time Anomaly Detection in Large-Scale Sensor Networks using Isolation Forests," 2024 International Conference on Communication, ComSalih, A. M., Raisi-Estabragh, Z., Boscolo Galazzo, I., Radeva, P., Petersen, S. E., Lekadir, K., & Menegaz, G. (2023). A perspective on explainable artificial intelligence methods: SHAP and LIME.puter Sciences and Engineering (IC3SE), Gautam Buddha Nagar, India, 2024, pp. 1400-1405, doi: 10.1109/IC3SE62002.2024.10593443.
+[85] Salih, A. M., Raisi-Estabragh, Z., Boscolo Galazzo, I., Radeva, P., Petersen, S. E., Lekadir, K., & Menegaz, G. (2023). A perspective on explainable artificial intelligence methods: SHAP and LIME. https://arxiv.org/html/2305.02012v3#:~:text=SHAP%20provides%20local%20and%20global,specific%20instance%20in%20the%20model.
+[86] Accelario. (n.d.). Data anonymization: The key to secure test data management. Accelario. Retrieved from https://accelario.com/data-anonymization/
+[87] Sriniva, Krupa & Shinde, Sakshi & Acharya, Prachi & Roy, Sritama. (2024). Explainable AI for Energy Prediction and Anomaly Detection in Solar Energy Systems. 10.21203/rs.3.rs-4922729/v1.  https://www.researchgate.net/publication/384411531_Explainable_AI_for_Energy_Prediction_and_Anomaly_Detection_in_Solar_Energy_Systems/citation/download
+[88] Explainable artificial intelligence for photovoltaic fault detection: A comparison of instruments, Solar Energy, Volume 249,2023,         Pages 139-151, ISSN 0038-092X, https://doi.org/10.1016/j.solener.2022.11.018.
+[89] Janjua, J. I., Ahmad, R., Abbas, S., Mohammed, A. S., Khan, M. S., Daud, A., Abbas, T., & Khan, M. A. (2024). Enhancing smart grid electricity prediction with the fusion of intelligent modeling and XAI integration. International Jnal of Advanced and Applied Sciences, 11(5), 230-248. https://doi.org/10.21833/ijaas.2024.05.025
+[90] Naveen, P. & Vinodkumar, S. (2025). Enhancing Power System Management With XAI. In J. Pandey (Ed.), Explainable Artificial Intelligence and Solar Energy Integration (pp. 393-416). IGI Global Scientific Publishing. https://doi.org/10.4018/979-8-3693-7822-9.ch014
+[91] Sarker, M. A. A., Shanmugam, B., Azam, S., & Thennadil, S. (2024). Enhancing smart grid load forecasting: An attention-based deep learning model integrated with federated learning and XAI for security and interpretability. Intelligent Systems with Applications, 23, 1-17. Article 200422. https://doi.org/10.1016/j.iswa.2024.200422
+[92] Cooper, A., Bretas, A., & Meyn, S. (2023). Anomaly Detection in Power System State Estimation: Review and New Directions. Energies, 16(18), 6678. https://doi.org/10.3390/en16186678
+[93] W. Zhou, "Power Quality Data Collection and Application in Distribution Network," 2022 IEEE International Conference on Artificial Intelligence and Computer Applications (ICAICA), Dalian, China, 2022, pp. 763-767, doi: 10.1109/ICAICA54878.2022.9844511.
+[94] J. K. Kalita, D. K. Bhattacharyya, and S. Roy, "3 - Data preparation," in Fundamentals of Data Science, J. K. Kalita, D. K. Bhattacharyya, and S. Roy, Eds. Academic Press, 2024, pp. 31–46, doi: 10.1016/B978-0-32-391778-0.00010-7.
+[95] C. Fan, M. Chen, X. Wang, J. Wang, and B. Huang, "A review on data preprocessing techniques toward efficient and reliable knowledge discovery from building operational data," Front. Energy Res., vol. 9, p. 652801, 2021, doi: 10.3389/fenrg.2021.652801.
+[96] S. Kryltcov, A. Makhovikov, and M. Korobitcyna, "Novel Approach to Collect and Process Power Quality Data in Medium-Voltage Distribution Grids," Symmetry, vol. 13, no. 3, p. 460, 2021, doi: 10.3390/sym13030460.
+[97]“Real Time Anomaly Detection in Network Traffic: A Comparative Analysis of Machine Learning Algorithms”, Int Res J Adv Engg Hub, vol. 2, no. 07, pp. 1968–1977, Jul. 2024, doi: 10.47392/IRJAEH.2024.0269.
+[98]S. C. Öner, H. Şahan, M. Demirdağ and A. T. Bayrak, "Anomaly Detection in Stock Market Transactions: A Comparison of Deep Learning Methods," 2024 32nd Signal Processing and Communications Applications Conference (SIU), Mersin, Turkiye, 2024, pp. 1-4, doi: 10.1109/SIU61531.2024.10601101.
+[99]C. Khirod, Ch. Panda, "Anomaly Detection of Financial Data using Machine Learning," International Jnal of Science and Research, 2024, doi: 10.21275/sr24403054826.
+[100]"Detecting Financial Fraud Using Anomaly Detection Techniques: A Comparative Study of Machine Learning Algorithms," Jnal of Computer Science and Technology Studies, vol. 6, no. 3, pp. 01-14, 2024, doi: 10.32996/jcsts.2024.6.3.1.
+[101]U. Do, L. Lahesoo, R. M. Carnier and K. Fukuda, "Evaluation of XAI Algorithms in IoT Traffic Anomaly Detection," 2024 International Conference on Artificial Intelligence in Information and Communication (ICAIIC), Osaka, Japan, 2024, pp. 669-674, doi: 10.1109/ICAIIC60209.2024.10463357. 
+[102] M. A. Kadir, A. Mosavi and D. Sonntag, "Evaluation Metrics for XAI: A Review, Taxonomy, and Practical Applications," 2023 IEEE 27th International Conference on Intelligent Engineering Systems (INES), Nairobi, Kenya, 2023, pp. 000111-000124, doi: 10.1109/INES59282.2023.10297629.
+[103]T. Phattanaviroj, M. Moslehp, A. Manohar, and W. Walawalkar, "Data Ethics and Privacy," in Advances in Computational Intelligence and Robotics, pp. 321-353, 2024, doi: 10.4018/979-8-3693-3860-5.ch010.
+[104]P. K. Goel, "Ethical and Privacy Considerations in Artificial Emotional Intelligence Deployment," in Human-Machine Collaboration and Emotional Intelligence in Industry 5.0, N. Kumar, S. Pal, P. Agarwal, J. Rosak-Szyrocka, and V. Jain, Eds., pp. 405-426, IGI Global Scientific Publishing, 2024, doi: 10.4018/979-8-3693-6806-0.ch022.
+[105]L. Narayanan Valli, S. Narayanan, M. Mech, and S. Lokesh, "Ethical considerations in data science: Balancing privacy and utility," International Jnal of Science and Research Archive, vol. 11, no. 1, pp. 011-022, 2024, doi: 10.30574/ijsra.2024.11.1.1098.
+[106] Marini, F. (n.d.). Building confidence on explainability methods. Towards Data Science. Retrieved from https://towardsdatascience.com/building-confidence-on-explainability-methods-66b9ee575514
+[107]Y. J. J. Alawneh, E. N. Z. Radwan, F. N. Salman, S. I. Makhlouf, K. Makhamreh and M. S. Alawneh, "Ethical Considerations in the Use of AI in Primary Education: Privacy, Bias, and Inclusivity," 2024 International Conference on Knowledge Engineering and Communication Systems (ICKECS), Chikkaballapur, India, 2024, pp. 1-6, doi: 10.1109/ICKECS61492.2024.10616986.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[a]Title Revised
+[b]SOP revised
+[c]Status report generation
+[d]Training Duration Revised
+[e]Shap Evaluation Metrics Revised
