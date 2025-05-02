@@ -76,3 +76,125 @@ Calinski-Harabasz Index indicated that KMeans formed the most compact and well-s
 This comparative analysis across varying cluster counts provides robust support for choosing KMeans with k=15 as the optimal configuration. It not only achieved the best individual metric values but also demonstrated consistent improvement and stability across metrics.
 
 
+4.1.2 Anomaly Classification Results
+Following the identification of optimal clustering parameters, each cluster was analyzed to determine its electrical characteristics and the corresponding anomaly type. Table 4.2 provides a detailed classification of power quality clusters, outlining the specific numerical thresholds for key electrical parameters. This classification framework forms the foundation for anomaly identification and supports the supervised learning process by assigning labels to distinct operational and anomaly states.
+Cluster
+Load Type
+Voltage Behavior
+Power Factor
+Key Observation / Anomaly
+Label
+0
+Light Load (<2A, <400W)
+Nominal with peaks >242.6V
+Good (0.75-0.85)
+Voltage surge under light load
+LightLoad_VoltageSurge
+1
+No Load (Idle) (<0.01A)
+Elevated (233-246V), >242.6V
+N/A (<0.1)
+Overvoltage during idle state
+Idle_Overvoltage
+2
+Light Load (<2A, <400W)
+Undervoltage (<217.4V, min 214V)
+Moderate (0.7-0.8)
+Undervoltage during light load
+LightLoad_Undervoltage
+3
+Very High Load (>20A, >5000W)
+Severe swings (212-249V, ±7.8%)
+Excellent (>0.98)
+High load with voltage instability
+HighLoad_VoltageInstability
+4
+High Load (10-16A, 2400-3200W)
+Extreme dips (<155V), ±21% variation
+Good (>0.9)
+Severe transients during high load
+HighLoad_SevereTransients
+5
+No Load (Idle) (<0.01A)
+Sustained undervoltage (203-224V)
+Very Low (<0.3)
+Undervoltage at idle, systemic issue
+Idle_Undervoltage
+6
+Moderate Load (0.6-1.0A, 80-120W)
+Mild fluctuation (221-245V)
+Very Poor (0.42-0.56)
+Reactive load with poor PF
+LowPF_ReactiveLoad
+7
+Low-Moderate (0.3-0.4A, 35-40W)
+Occasional surges (225-245V)
+Moderate (0.50-0.55)
+Minor surges with PF issues
+ModeratePF_MinorSurge
+8
+High Load (12-16A, 2300-3900W)
+Wide variation (210-245V, σ=12.8V)
+Moderate (0.7-0.85)
+Mixed voltage anomalies at high load
+HighLoad_MixedAnomalies
+9
+Light Load (0.2-0.95A, <100W)
+Sustained undervoltage (201-222V)
+Poor (0.40-0.45)
+Combined low PF and undervoltage
+LightLoad_Undervoltage_LowPF
+10
+Light Load (0.5-2.0A, <250W)
+Slightly elevated (230-245V)
+Good (0.77-0.80)
+Minor voltage surges, efficient load
+LightLoad_MinorSurge
+11
+High Load (5-7A, 1200-1800W)
+Stable (225-246V)
+Excellent (0.90-0.95)
+Ideal high load operation
+HighLoad_Optimal
+12
+No Load (Idle) (<0.01A)
+Very stable (235-241V)
+N/A (<0.1)
+Baseline idle condition
+Idle_Stable
+13
+High Load (5-6A, 950-1350W)
+Stable (221-245V)
+Near Unity (0.96-0.98)
+Excellent operation at high load
+HighLoad_Excellent
+14
+Very High Load (>20A, 4000-5400W)
+Stable (235-248V)
+Near Unity (0.98-0.99)
+Peak load with excellent power quality
+PeakLoad_Excellent
+
+Table 4.2: Power Quality Cluster Classification with Numerical Thresholds
+This table categorizes each cluster based on combinations of load conditions, voltage behavior, and power factor. The numerical thresholds defined for each cluster enable precise identification of power quality issues, ranging from undervoltage and overvoltage to power factor imbalances and load intensity anomalies. The resulting classification not only enhances automated anomaly detection but also aids in the interpretability of power quality conditions, providing clear guidelines for addressing various operational states.
+
+Visualization of Clustered Electrical Parameters
+To validate the separation between identified clusters and assess their alignment with predefined anomaly thresholds, key electrical parameters—voltage, power factor, current, and power—were visualized across all cluster labels. The following figures illustrate the distribution of these parameters, highlighting operational conditions such as undervoltage, overvoltage, reactive power issues, and load intensity. These visualizations support the interpretability of clustering results and provide a basis for assigning anomaly-type labels in subsequent supervised classification.
+
+Figure 4.2: Cluster Size Distribution Across Identified Operational States
+This figure shows the number of data points assigned to each cluster, indicating the frequency of occurrence for different operational and anomaly types. Larger clusters typically represent steady-state or nominal conditions, while smaller clusters often capture rare or extreme power quality issues. Understanding cluster sizes is critical for evaluating anomaly prevalence and ensuring appropriate handling of class imbalance in downstream supervised models.
+
+
+Figure 4.3: Voltage Distribution Across Clusters
+This figure illustrates the voltage distribution within each identified cluster. Dashed lines at 217.4 V and 242.6 V represent the defined anomaly thresholds, highlighting clusters with undervoltage and overvoltage conditions.
+
+Figure 4.4: Power Factor Distribution Across Clusters
+Power factor distribution across clusters is shown with thresholds at 0.5, 0.7, and 0.85. These boundaries categorize power factor quality from poor to excellent and help differentiate operational states with reactive power issues.
+
+Figure 4.5: Current Distribution Across Clusters
+The current distribution highlights load intensity within each cluster. Clusters are distinguishable based on typical current draw, aiding in classifying operations from idle to very high load.
+
+
+Figure 4.6: Power Consumption Patterns Across Clusters
+This figure presents the active power consumption range for each cluster. It reflects the energy usage characteristics and supports the identification of light, moderate, and heavy load scenarios.
+
