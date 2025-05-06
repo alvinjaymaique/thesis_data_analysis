@@ -1,10 +1,183 @@
 Chapter 4: Results and Discussion
 4.1 Anomaly Detection Results
-4.1.1 Clustering Performance Evaluation
+4.1.1 Data Processing and Feature Engineering
+Before applying clustering algorithms, we developed a robust data processing pipeline to handle the large volume of power quality measurements collected from our sensor networks across Cebu. Our original dataset contained over 3 million raw data points from multiple locations. This section describes the methodology used to transform this large dataset into a representative sample suitable for clustering and classification.
+
+Data Acquisition and Preprocessing
+Raw data was collected from filtered_data directory containing CSV files from 6 distinct locations across Cebu's power distribution network. Each location's data was tagged with its geographical identifier to enable location-based analysis later in the process.
+Key preprocessing steps included:
+Linear interpolation of missing values within each location's data
+Median-based imputation for any remaining missing critical values
+Validation of timestamp continuity and critical parameter presence
+Removal of any rows with persistent missing values in critical columns
+
+
+Feature Engineering
+We engineered a comprehensive set of 10 features to capture both raw measurements and derived indicators of power quality:
+
+
+Feature Name
+Type
+Description
+Formula
+voltage
+Raw
+Supply voltage (V)
+–
+current
+Raw
+Current draw measurement (A)
+–
+frequency
+Raw
+AC frequency measurement (Hz)
+–
+power
+Raw
+Active power consumption (W)
+–
+powerFactor
+Raw
+Power factor ratio (dimensionless)
+–
+voltage_deviation
+Derived
+Relative deviation from nominal voltage
+(voltage − 230.0) / 230.0
+frequency_deviation
+Derived
+Relative deviation from nominal frequency
+(frequency − 60.0) / 60.0
+pf_deviation
+Derived
+Deviation from ideal power factor
+powerFactor − 1.0
+power_voltage_ratio
+Derived
+Power normalized by voltage
+power / (voltage + 0.1)
+current_voltage_ratio
+Derived
+Current normalized by voltage
+current / (voltage + 0.1)
+
+Table 4.1: Raw and Derived Features Used in Clustering and Classification
+These derived features were specifically designed to highlight deviations from nominal values and capture relationships between electrical parameters that signal anomalous conditions.
+
+Strategic Data Reduction
+To create a manageable yet representative dataset, we implemented a stratified sampling approach that preserved the diversity and distribution of anomalies:
+Anomaly-Based Stratification: Data was categorized into:
+Feature Name
+Description
+voltage_deviation
+Deviation of voltage from nominal 230V
+frequency_deviation
+Deviation of frequency from ideal 60Hz
+pf_deviation
+Difference between power factor and 1.0
+severe_voltage_dip
+Voltage < 195V
+moderate_voltage_dip
+Voltage between 195–207V
+mild_voltage_dip
+Voltage between 207–217.4V
+mild_surge
+Voltage between 242.6–248V
+moderate_surge
+Voltage between 248–253V
+severe_surge
+Voltage > 253V
+severe_pf_issue
+Power Factor < 0.5
+moderate_pf_issue
+Power Factor 0.5–0.7
+mild_pf_issue
+Power Factor 0.7–0.792
+freq_low
+Frequency < 59.2 Hz
+freq_high
+Frequency > 60.8 Hz
+high_current
+Current > 10 A
+very_high_current
+Current > 20 A
+high_power
+Power > 1000 W
+very_high_power
+Power > 3000 W
+transient_flag
+Voltage dip with valid frequency (indicates transient dip)
+surge_flag
+Voltage surge with valid frequency
+pf_issue_flag
+Power factor below 0.75
+power_voltage_ratio
+Power divided by voltage
+current_voltage_ratio
+Current divided by voltage
+
+Table 4.2: Threshold-Based Features for Feature Engineering and Sampling
+Normalization
+Before applying clustering algorithms, features were normalized using StandardScaler to ensure that parameters with different units and scales would contribute equally to the clustering process.
+This comprehensive data processing pipeline ensured that our analysis would be based on a dataset that accurately represented the diversity of power quality conditions across Cebu's distribution network while remaining computationally feasible.
+
+4.1.2 Data Reduction Strategy and Results
+To manage computational efficiency and enable meaningful anomaly clustering, a multi-stage data reduction strategy was employed. This process reduced the original 3,721,330 raw sensor readings into a representative dataset of 20,000 samples, while preserving diversity in anomaly types, locations, and voltage conditions.
+1. Balanced Anomaly Targeting: An ideal target distribution was defined to include 20% transient anomalies, 20% surge anomalies, 30% power factor (PF) issues, and 30% random data. This ensured each anomaly type was adequately represented in the dataset used for clustering and subsequent classification.
+2. Location-Based Stratification: To maintain spatial diversity and ensure fair representation of monitoring sites across Cebu’s power grid, samples were proportionally drawn from each location. A minimum threshold of 50 samples per location was enforced.
+3. Voltage Range Preservation: Within each location, voltage values were binned to ensure that the full spectrum of voltage conditions—including dips and surges—was preserved in the final dataset. This maintained the dataset’s ability to reflect realistic operational variations.
+Anomaly Type
+Sample Count
+Percentage
+Transient anomalies
+4,065
+20.3%
+Surge anomalies
+280
+1.4%
+Power factor issues
+9,188
+45.9%
+Random data
+7,875
+39.4%
+
+Table 4.3: Final Distribution of Anomaly Types. Note: The percentages in Table 1 sum to more than 100% because some samples may exhibit multiple anomaly types simultaneously.
+
+Location
+Sample Count
+Tugas
+7,396
+Lorega
+2,441
+Naga
+1,909
+Kodia
+1,888
+Busay
+1,852
+Bato
+1,204
+Tinago
+811
+SanFernando
+792
+Poblacion
+709
+Pusok
+593
+Talamban
+350
+Ticad
+55
+
+Table 4.4: Sample Distribution by Monitoring Location
+
+4.1.3 Clustering Performance Evaluation
 In this study, five clustering algorithms were evaluated for their effectiveness in identifying power quality anomalies in sensor readings: K-Means, Spectral Clustering, Agglomerative Clustering, Ward Hierarchical Clustering, and Gaussian Mixture Model. These algorithms were selected based on their diverse approaches to cluster formation and their suitability for identifying distinct patterns in multidimensional power quality data.
 
 Clustering Algorithm Performance Comparison
-The table below presents the performance metrics for each algorithm evaluated on the sensor dataset:
+The optimal internal validation metrics obtained for each clustering algorithm applied to the sensor dataset are summarized in Table 4.5.
 Algorithm
 Silhouette Score
 Davies-Bouldin Index
@@ -36,17 +209,11 @@ GaussianMixture
 13172.41
 6
 
-
+Table 4.5: Performance Metrics for Clustering Model Selection
 These metrics provide different perspectives on clustering quality:
 Silhouette Score measures how similar an object is to its own cluster compared to other clusters. The range is from -1 to 1, where higher values indicate better-defined clusters. KMeans achieved the highest score (0.5321), indicating well-separated and cohesive clusters.
 Davies-Bouldin Index evaluates intra-cluster similarity and inter-cluster differences, with lower values indicating better clustering. AgglomerativeClustering and WardHierarchical performed best (0.8446), closely followed by KMeans (0.8690).
 Calinski-Harabasz Index (Variance Ratio Criterion) measures the ratio of between-cluster dispersion to within-cluster dispersion, with higher values indicating better-defined clusters. KMeans substantially outperformed other algorithms (17239.31).
-
-PCA Visualization of Clustering Results
-To visualize the high-dimensional clustering results, Principal Component Analysis (PCA) was applied to reduce the feature space to two dimensions while preserving maximum variance. Figure 1 shows the PCA visualization of the KMeans clustering results:
-
-PCA Visualization of KMeans Clustering
-The PCA projection demonstrates clear separation between most clusters, particularly those representing distinct anomaly types. The first two principal components captured approximately 73% of the total variance in the dataset, indicating that the visualization provides a reasonable representation of the cluster distribution.
 
 Selection of Optimal Clustering Model
 KMeans was selected as the optimal clustering algorithm for the following reasons:
@@ -63,7 +230,7 @@ In the next section, we will examine how these clusters were mapped to specific 
 Clustering Metrics Across Varying Cluster Counts
 To determine the optimal number of clusters and assess how each algorithm responds to varying values of k, clustering performance metrics were computed across a range of k=2 to k=15. Figure 2 illustrates the trend of Silhouette Score, Davies-Bouldin Index, and Calinski-Harabasz Index for each algorithm:
 
-Figure 2. Clustering Metric Comparison across Varying Cluster Counts
+Figure 4.1. Clustering Metric Comparison across Varying Cluster Counts
 Silhouette Score trends reveal that KMeans consistently improved as k increased, peaking at k=15, further supporting its selection. Agglomerative and Ward Hierarchical Clustering also demonstrated strong cohesion, while Spectral Clustering's performance declined at higher values of k, even becoming unstable.
 
 
@@ -75,8 +242,15 @@ Calinski-Harabasz Index indicated that KMeans formed the most compact and well-s
 
 This comparative analysis across varying cluster counts provides robust support for choosing KMeans with k=15 as the optimal configuration. It not only achieved the best individual metric values but also demonstrated consistent improvement and stability across metrics.
 
+PCA Visualization of Clustering Results
+To visualize the high-dimensional clustering results, Principal Component Analysis (PCA) was applied to reduce the feature space to two dimensions while preserving maximum variance. Figure 1 shows the PCA visualization of the KMeans clustering results:
 
-4.1.2 Anomaly Classification Results
+Figure 4.2: PCA Visualization of KMeans Clustering Results on Sensor Feature Space
+
+PCA Visualization of KMeans Clustering
+The PCA projection demonstrates clear separation between most clusters, particularly those representing distinct anomaly types. The first two principal components captured approximately 73% of the total variance in the dataset, indicating that the visualization provides a reasonable representation of the cluster distribution.
+
+4.1.4 Anomaly Classification Results
 Following the identification of optimal clustering parameters, each cluster was analyzed to determine its electrical characteristics and the corresponding anomaly type. Table 4.2 provides a detailed classification of power quality clusters, outlining the specific numerical thresholds for key electrical parameters. This classification framework forms the foundation for anomaly identification and supports the supervised learning process by assigning labels to distinct operational and anomaly states.
 Cluster
 Load Type
@@ -181,20 +355,430 @@ This table categorizes each cluster based on combinations of load conditions, vo
 Visualization of Clustered Electrical Parameters
 To validate the separation between identified clusters and assess their alignment with predefined anomaly thresholds, key electrical parameters—voltage, power factor, current, and power—were visualized across all cluster labels. The following figures illustrate the distribution of these parameters, highlighting operational conditions such as undervoltage, overvoltage, reactive power issues, and load intensity. These visualizations support the interpretability of clustering results and provide a basis for assigning anomaly-type labels in subsequent supervised classification.
 
-Figure 4.2: Cluster Size Distribution Across Identified Operational States
+Figure 4.3: Cluster Size Distribution Across Identified Operational States
 This figure shows the number of data points assigned to each cluster, indicating the frequency of occurrence for different operational and anomaly types. Larger clusters typically represent steady-state or nominal conditions, while smaller clusters often capture rare or extreme power quality issues. Understanding cluster sizes is critical for evaluating anomaly prevalence and ensuring appropriate handling of class imbalance in downstream supervised models.
 
 
-Figure 4.3: Voltage Distribution Across Clusters
+Figure 4.4: Voltage Distribution Across Clusters
 This figure illustrates the voltage distribution within each identified cluster. Dashed lines at 217.4 V and 242.6 V represent the defined anomaly thresholds, highlighting clusters with undervoltage and overvoltage conditions.
 
-Figure 4.4: Power Factor Distribution Across Clusters
+Figure 4.5: Power Factor Distribution Across Clusters
 Power factor distribution across clusters is shown with thresholds at 0.5, 0.7, and 0.85. These boundaries categorize power factor quality from poor to excellent and help differentiate operational states with reactive power issues.
 
-Figure 4.5: Current Distribution Across Clusters
+Figure 4.6: Current Distribution Across Clusters
 The current distribution highlights load intensity within each cluster. Clusters are distinguishable based on typical current draw, aiding in classifying operations from idle to very high load.
 
 
-Figure 4.6: Power Consumption Patterns Across Clusters
+Figure 4.7: Power Consumption Patterns Across Clusters
 This figure presents the active power consumption range for each cluster. It reflects the energy usage characteristics and supports the identification of light, moderate, and heavy load scenarios.
+
+4.1.5 Supervised Classification Accuracy Results
+Following the unsupervised clustering and anomaly type labeling process described in the previous sections, supervised classification models were trained to recognize and categorize these operational states in new data. This approach transforms the initial clustering-based anomaly detection into a deployable classification system capable of real-time anomaly identification and categorization.
+
+Classification Models Implemented
+Six different classification algorithms were evaluated, each chosen for their distinct strengths in handling power quality data patterns:
+Decision Tree: Selected for interpretability and ability to capture threshold-based decision boundaries
+Logistic Regression: Provides a baseline linear classifier with low computational requirements
+Random Forest: Ensemble method that combines multiple decision trees to reduce overfitting
+Support Vector Machine (SVM): Effective for finding optimal separating hyperplanes in high-dimensional feature spaces
+Gradient Boosting Machine (GBM): Sequential ensemble method that builds trees to correct errors of previous ones
+Multi-Layer Perceptron (MLP): Neural network approach to capture complex non-linear relationships
+The models were trained using the 10 features described in Section 3.6.2 (5 raw electrical parameters and 5 derived features), with the target variable being the anomaly type derived from the clustering process. A standard 70-30 train-test split was implemented to ensure robust evaluation.
+
+Feature Scaling Implementation
+Not all models require feature scaling for optimal performance. Based on each algorithm's sensitivity to feature scales:
+
+
+Model Type
+Feature Scaling
+Reasoning
+SVM
+ Scaled
+Distance-based algorithm sensitive to feature magnitudes
+MLP
+ Scaled
+Neural networks converge faster with normalized inputs
+Logistic Regression
+ Scaled
+Gradient descent optimization performs better with normalized features
+Decision Tree
+ Unscaled
+Split decisions based on thresholds, not affected by scale
+Random Forest
+ Unscaled
+Ensemble of trees inherits scale invariance property
+GBM
+ Unscaled
+Tree-based algorithm naturally handles different scales
+
+Table 4.6: Feature Scaling Implementation
+This selective scaling approach optimizes each algorithm's natural strengths, as distance-based models and neural networks benefit from normalized feature ranges, while tree-based methods are naturally invariant to feature scaling.
+
+Performance Results
+The classification models demonstrated high accuracy in identifying the 15 distinct operational states, as summarized in Table 4.7:
+Model
+Accuracy (%)
+Training Time (s)
+GBM
+99.73
+40.33
+Random Forest
+99.73
+1.52
+Decision Tree
+99.67
+0.07
+MLP
+99.58
+9.10
+Logistic Regression
+99.25
+0.98
+SVM
+99.23
+3.17
+
+Table 4.7: Performance Results
+The unscaled tree-based models perform slightly better than the scaled models, which supports your selective scaling approach. Random Forest offers the best balance of accuracy (99.73%) and speed (1.52s) compared to GBM's similar accuracy but much longer training time (40.33s).
+While these models demonstrate excellent classification performance, understanding which features drive their predictions requires explainability techniques, which will be explored in the XAI implementation section.
+
+4.2 XAI Integration (SHAP Analysis)
+This section presents the results of integrating Explainable AI (XAI) techniques with our anomaly detection model for power quality monitoring. We focus on SHAP (SHapley Additive exPlanations) to provide transparent explanations for anomaly classifications, implementing the methodology described in Section 3.16.
+
+4.2.1 Evaluation of XAI Metrics
+To determine the most suitable XAI approach, we evaluated three SHAP explainers using the evaluation metrics described in Section 3.17: consistency, stability, and compacity. Each explainer offers different advantages in terms of computational efficiency and explanation quality.
+Consistency Metric Results
+The consistency metric examines whether different explainers produce similar feature importance rankings. Table 4.3 presents the pairwise consistency scores between explainers:
+Explainer Pair
+Correlation Score
+TreeExplainer vs KernelExplainer
+0.2414
+TreeExplainer vs SamplingExplainer
+0.2414
+KernelExplainer vs SamplingExplainer
+0.2144
+
+Table 4.8: Pairwise Consistency Scores Between SHAP Explainers
+
+The moderate correlation scores (approximately 0.24) indicate some agreement between explainers, but also suggest that different explainers emphasize different aspects of the model's decision-making process. The highest consistency was observed between TreeExplainer and the other two methods.
+
+Stability Metric Results
+The stability metric evaluates how robust the explanations are when subjected to minor variations in the input data. A higher stability score indicates more reliable explanations across different data samples.
+
+Explainer
+Stability Score
+TreeExplainer
+1.0000
+KernelExplainer
+1.0000
+SamplingExplainer
+1.0000
+
+Table 4.9: Stability Scores for SHAP Explainers
+All three explainers TreeExplainer, KernelExplainer, and SamplingExplainer achieved perfect stability scores (1.0000). This indicates that their feature importance explanations remained highly consistent even when the input data was varied across different random subsets. These results support the reliability and robustness of the explainers when applied to real-world anomaly detection in energy data.
+Compacity Metric Results
+The compacity metric assesses how many features are needed to provide a sufficiently accurate explanation. For this analysis, we set a threshold of 90% explanation quality and determined the minimum number of features required to reach this threshold.
+Explainer
+Features Required for 90% Explanation Quality
+Total Features
+TreeExplainer
+8
+10
+KernelExplainer
+8
+10
+SamplingExplainer
+8
+10
+
+Table 4.10: Compacity Analysis for SHAP Explainers
+All three explainers demonstrated the same level of compacity, requiring 8 out of 10 features to achieve 90% explanation quality. This suggests that while the majority of features contribute to the model's decisions, there is some redundancy in the feature set.
+Selection of Optimal SHAP Explainer
+Based on the evaluation metrics, TreeExplainer was selected as the most suitable option for further analysis. This decision was made considering:
+High stability score: TreeExplainer achieved a perfect stability score of 1.0, indicating robust explanations across varied input data
+Better consistency: TreeExplainer showed higher consistency with other explainers
+Computational efficiency: TreeExplainer is specifically optimized for tree-based models like Random Forest, providing faster explanation generation compared to model-agnostic alternatives
+Equal compacity: All explainers showed identical compacity metrics
+
+4.2.2 Global Feature Importance
+Global feature importance was analyzed using TreeExplainer. The results show that voltage, power, and power factor were consistently the most influential features in anomaly classification. SHAP summary plots highlight distinct importance patterns across anomaly types, indicating that the model relies on different features depending on the nature of the anomaly.
+
+Figure 4.7: Global Feature Importance Across All Anomaly Types
+
+The analysis revealed the following top five most influential features based on global SHAP values:
+Voltage: 0.0278
+Voltage Deviation: 0.0270
+Power Factor Deviation: 0.0249
+Power Factor: 0.0239
+Frequency: 0.0194
+
+
+These results demonstrate that voltage-related features contribute the most to anomaly classification, followed by power factor and frequency attributes. The dominance of these parameters is consistent with established power quality theory, where voltage fluctuations and power factor irregularities are recognized as key indicators of disturbances in electrical distribution systems.
+
+4.2.3 Anomaly-Specific Feature Importance
+To better interpret the patterns in SHAP-derived feature importance, the fifteen clustered anomaly types were categorized into two overarching groups based on their severity and operational implications: True Anomalies and Operational Anomalies.
+
+Type
+Description
+Example Anomaly Labels
+🔴 True Anomalies
+Violations of operational thresholds accompanied by irregular patterns
+HighLoad_MixedAnomalies
+HighLoad_SevereTransients
+HighLoad_VoltageInstability
+Idle_Overvoltage
+Idle_Undervoltage
+LightLoad_MinorSurge, LightLoad_Undervoltage
+LightLoad_Undervoltage_LowPF
+LightLoad_VoltageSurge
+LowPF_ReactiveLoad
+ModeratePF_MinorSurge
+🟡 Operational Anomalies
+Technically outside standard ranges but generally stable and efficient
+HighLoad_Excellent
+HighLoad_Optimal
+Idle_Stable
+PeakLoad_Excellent
+
+Table 4.11: Power Quality Anomaly Types Categorization
+
+Explanation of Categorization
+True Anomalies (11 Types)
+These instances exhibit significant deviations from acceptable operational thresholds and typically indicate the presence of critical power quality issues. They are characterized by voltage irregularities, power factor deviations, or a combination of both.
+Voltage-related anomalies:
+HighLoad_SevereTransients – Severe voltage fluctuations during periods of high load.
+HighLoad_VoltageInstability – Voltage instability occurring under heavy power demand.
+Idle_Overvoltage – Abnormally high voltage during minimal load conditions.
+Idle_Undervoltage – Voltage drop during periods of low or idle load.
+LightLoad_MinorSurge – Minor voltage surges under light load conditions.
+LightLoad_Undervoltage – Undervoltage occurrences during light load.
+LightLoad_VoltageSurge – Sudden voltage spikes under light loading conditions.
+Power factor-related anomalies:
+LightLoad_Undervoltage_LowPF – Concurrent undervoltage and poor power factor.
+LowPF_ReactiveLoad – Extremely low power factor due to a highly reactive load.
+ModeratePF_MinorSurge – Moderate power factor deviation coupled with voltage fluctuations.
+Mixed anomaly:
+HighLoad_MixedAnomalies – Simultaneous occurrence of multiple abnormal behaviors, such as voltage instability and low power factor.
+
+Operational Anomalies (4 Types)
+These cases fall marginally outside defined threshold limits but are considered operationally stable or efficient. They do not require immediate corrective actions and often reflect optimal system performance under varying load conditions.
+Efficient operation:
+HighLoad_Excellent – High demand with excellent power quality metrics.
+HighLoad_Optimal – Efficient system operation under high load without signs of degradation.
+PeakLoad_Excellent – Excellent performance even at maximum power consumption.
+Stable idle state:
+Idle_Stable – Normal system stability during periods of minimal power usage.
+
+4.2.4 Anomaly-Specific Global Feature Importance
+This section presents the SHAP-based global feature importance analysis for each of the 15 identified anomaly types. The visualizations show the top features influencing the model’s classification decisions within each cluster. These insights help validate the anomaly definitions and guide future diagnostics or mitigation strategies.
+
+
+
+
+Figure 4.8: Feature Importance – HighLoad_SevereTransients
+
+
+
+
+
+Figure 4.9: Feature Importance – HighLoad_VoltageInstability
+
+
+
+
+
+Figure 4.10: Feature Importance – Idle_Overvoltage
+
+
+Figure 4.11: Feature Importance – Idle_Undervoltage
+
+
+
+
+
+Figure 4.12: Feature Importance –LightLoad_MinorSurge
+
+
+
+Figure 4.13: Feature Importance –LightLoad_Undervoltage
+
+
+Figure 4.14: Feature Importance –LightLoad_VoltageSurge
+
+
+
+Figure 4.15: Feature Importance –LightLoad_Undervoltage_LowPF
+
+
+Figure 4.16: Feature Importance –LowPF_ReactiveLoad
+
+
+Figure 4.17: Feature Importance –ModeratePF_MinorSurge
+
+
+Figure 4.18: Feature Importance –Highload_MixedAnomalies
+
+
+Figure 4.19: Feature Importance –Highload_Excellent
+
+
+Figure 4.20: Feature Importance –Highload_Optimal
+
+
+Figure 4.21: Feature Importance – PeakLoad_Excellent
+
+
+Figure 4.22: Feature Importance – Idle_Stable
+
+
+
+To summarize the insights derived from the visualizations above highlights the top contributing features across all anomaly types, emphasizing the key differences between true anomalies and operational anomalies.
+Category
+Anomaly Type
+Top Feature
+2nd Feature
+3rd Feature
+Key Feature Difference
+True Anomalies
+HighLoad_SevereTransients
+voltage_deviation
+current
+power
+Higher voltage_deviation importance
+True Anomalies
+LowPF_ReactiveLoad
+powerFactor
+pf_deviation
+power_voltage_ratio
+Dominant powerFactor importance
+True Anomalies
+HighLoad_MixedAnomalies
+voltage_deviation
+current
+power
+Mixed importance distribution
+True Anomalies
+HighLoad_VoltageInstability
+current
+power
+voltage_deviation
+Current dominates over voltage features
+True Anomalies
+Idle_Overvoltage
+voltage
+voltage_deviation
+current
+Very strong voltage feature importance
+True Anomalies
+Idle_Undervoltage
+voltage
+voltage_deviation
+current
+High importance of voltage features
+True Anomalies
+LightLoad_MinorSurge
+frequency_deviation
+frequency
+power_voltage_ratio
+Uniquely frequency-dominated
+True Anomalies
+LightLoad_Undervoltage
+voltage
+voltage_deviation
+pf_deviation
+Dominated by absolute voltage
+True Anomalies
+LightLoad_Undervoltage_LowPF
+powerFactor
+pf_deviation
+voltage_deviation
+Combined PF and voltage importance
+True Anomalies
+LightLoad_VoltageSurge
+voltage
+voltage_deviation
+powerFactor
+Very high voltage feature importance
+True Anomalies
+ModeratePF_MinorSurge
+powerFactor
+pf_deviation
+voltage_deviation
+Balanced PF and voltage features
+Operational Anomalies
+HighLoad_Excellent
+current
+power
+powerFactor
+Balanced importance of all three
+Operational Anomalies
+HighLoad_Optimal
+current
+power
+powerFactor
+Load features dominate
+Operational Anomalies
+Idle_Stable
+current
+power
+current_voltage_ratio
+Very low current is most important
+Operational Anomalies
+PeakLoad_Excellent
+power
+current
+powerFactor
+Power feature dominates
+
+Table 4.12: Top Contributing Features by Anomaly Category
+This summary confirms that true anomalies typically emphasize deviation-related features (e.g., voltage_deviation, pf_deviation, frequency_deviation), which reflect irregular or unstable behavior. In contrast, operational anomalies tend to show balanced or load-related importance, aligning with normal or efficient operational characteristics.
+4.2.5 Local Explanations for Anomalies
+This section demonstrates how SHAP (SHapley Additive exPlanations) provides detailed interpretability for individual power quality anomalies. While global feature importance helps understand the model's behavior across all predictions, local explanations reveal why specific readings are classified as particular anomaly types, offering actionable insights for utility operators.
+
+Case Study: LightLoad_MinorSurge Anomaly from Bato
+To illustrate the effectiveness of local explanations, we analyzed a specific sensor reading (index 5252) from Bato that was classified as "LightLoad_MinorSurge" by our model. This anomaly type represents a condition where voltage is slightly elevated under light load conditions.
+Sensor Reading Characteristics
+The reading exhibited the following electrical parameters:
+Voltage: 240.40 V (slightly elevated, but below severe surge threshold)
+Current: 0.942 A (confirming light load operation)
+Power: 154.90 W (consistent with light load classification)
+Power Factor: 0.68 (moderately reduced)
+Frequency: 59.80 Hz (slight negative deviation from nominal 60 Hz)
+SHAP Analysis Results
+
+Figure 4.23: SHAP waterfall plot explaining classification of reading #5252 as LightLoad_MinorSurge
+
+The SHAP waterfall plot reveals that:
+Frequency-related features dominated the classification decision:
+frequency_deviation (contribution: 0.1460) - The slight negative deviation (-0.0033) from nominal frequency was the strongest factor
+frequency (contribution: 0.1370) - The absolute frequency value of 59.80 Hz was the second most important factor
+Secondary contributing factors included:
+power_voltage_ratio (0.0968) - Indicating the relationship between power consumption and voltage level
+powerFactor (0.0922) - The moderate power factor of 0.68
+power (0.0916) - The light load consumption of 154.9W
+Voltage measurements were less influential despite this being categorized as a voltage-related anomaly:
+voltage (0.0862) and voltage_deviation (0.0830) had lower contributions
+
+Interpretation and Practical Significance
+This local explanation reveals an important insight: while the anomaly is categorized as "LightLoad_MinorSurge" (suggesting voltage is the primary concern), the model actually placed greater importance on frequency characteristics when making this specific classification. This nuance would not be apparent from global feature importance alone.
+For utility operators in Bato, this explanation suggests:
+Monitoring focus: While voltage appears slightly elevated (240.40V), closer attention should be paid to frequency stability at this location, as even small deviations significantly influence anomaly detection.
+Maintenance prioritization: The combination of reduced frequency and moderate power factor may indicate potential issues with reactive loads or distribution system resonance rather than a simple voltage regulation problem.
+Root cause analysis: The moderate power factor (0.68) combined with the frequency deviation points to potential harmonic issues or inductive loads affecting power quality, rather than upstream voltage regulation problems.
+
+This example demonstrates how SHAP explanations transform "black box" anomaly classifications into actionable insights by identifying which electrical parameters truly drive specific anomaly detections.
+
+Cross-Location Analysis of Local Explanations
+To understand how anomaly characteristics vary across Cebu's power distribution network, we conducted similar analyses for representative samples from different locations. These analyses revealed location-specific patterns:
+Lorega: Voltage features typically dominated anomaly classifications, suggesting voltage regulation as the primary concern in this area.
+Tugas: Power factor deviations were more influential, indicating potential reactive power management issues.
+Bato: As shown in our case study, frequency features often had unexpectedly high importance despite anomalies being categorized as voltage-related.
+These location-specific insights enable targeted infrastructure improvements and more efficient resource allocation by distribution utilities across Cebu.
+Practical Applications of Local Explanations
+The local explanations generated through SHAP provide several practical benefits for power quality monitoring:
+Verification of classifications: Engineers can verify whether model predictions align with their domain expertise based on the feature contributions.
+Targeted maintenance: Resources can be directed to address specific components causing issues, rather than general system maintenance.
+Knowledge discovery: Unexpected feature importance patterns (like frequency dominating a voltage anomaly classification) can reveal hidden relationships between power quality parameters.
+Training material: These explanations serve as effective training examples for new personnel to understand the complex interactions between electrical parameters.
+By combining global feature importance with local explanations, utility operators gain a comprehensive understanding of both system-wide patterns and specific anomaly instances, enabling more effective monitoring and maintenance of Cebu's power distribution network.
 
