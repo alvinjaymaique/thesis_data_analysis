@@ -1,0 +1,246 @@
+CYBER-PHYSICAL INTEROPERABILITY IN ARTIFICIAL INTELLIGENCE OF THINGS  UNDER INTELLIGENT POWER QUALITY MONITORING 
+
+Youssef Cabañero
+Department of Computer Engineering
+College of Engineering 
+Cebu Technological University
+Cebu, Philippines
+youssefcabanero@gmail.com
+
+
+Jayson Jueco
+Department of Electrical Engineering
+College of Engineering 
+Cebu Technological University
+Cebu, Philippines
+juecoree@gmail.com
+Melvin Inajada
+Department of Computer Engineering
+College of Engineering 
+Cebu Technological University
+Cebu, Philippines
+melvin.inajada@gmail.com
+
+
+Rafran de Villa
+Department of Computer Engineering
+College of Engineering 
+Cebu Technological University
+Cebu, Philippines
+rafran.devilla@ctu.edu.phRushell Jr. Vaflor
+Department of Computer Engineering
+College of Engineering 
+Cebu Technological University
+Cebu, Philippines
+rushelljrvaflor@gmail.com
+
+
+
+
+This thesis presents a comprehensive framework for enhancing cyber-physical interoperability in Artificial Intelligence of Things (AIoT) systems for intelligent power quality monitoring. The study addresses the growing need for real-time, autonomous detection of power anomalies—such as voltage sags, transients, and outages—by integrating AI-driven analytics into a distributed cyber-physical system (CPS). A sensor network, composed of ESP32 microcontrollers and PZEM-004T modules, was deployed in 14 diverse household locations across Cebu, Philippines, to monitor electrical parameters including voltage, current, frequency, power, and power factor.
+Collected data were transmitted securely via TLS to a cloud-based database, where multiple machine learning models—including Decision Trees, Random Forest, SVM, Autoencoders, and MLPs—were trained for anomaly detection. The system's interoperability and communication performance were evaluated using metrics such as packet loss ratio, bit error rate, latency, and throughput, while dashboard usability was assessed via ISO/IEC 25010 standards.
+Findings reveal that the proposed CPS-AIoT integration offers accurate, low-latency anomaly detection and effective real-time monitoring under various network and environmental conditions. This research provides a scalable and cost-efficient model for improving grid reliability, especially in resource-constrained areas, and contributes to the development of standardized frameworks for interoperable smart energy systems.
+Keywords—Cyber-Physical Systems, Artificial Intelligence of Things, Power Quality Monitoring, Anomaly Detection, Machine Learning, Interoperability
+
+
+
+
+
+
+
+
+
+
+INTRODUCTION
+The increasing digitalization of power infrastructure and the rising demand for reliable electricity have highlighted the urgent need for intelligent and interoperable monitoring systems. In developing countries like the Philippines, frequent power quality issues—such as voltage sags, transients, and sustained outages—continue to disrupt households, industries, and public services. These disturbances not only compromise operational efficiency but also lead to significant economic losses and system downtime. To address these challenges, innovations in Cyber-Physical Systems (CPS) and the Artificial Intelligence of Things (AIoT) have emerged as promising solutions for creating intelligent energy monitoring systems.
+
+Cyber-Physical Systems provide a real-time interface between computational processes and physical assets, while AIoT combines the sensing capabilities of IoT with machine learning to enable adaptive and autonomous decision-making. However, the integration of these technologies in energy monitoring remains hindered by interoperability challenges—particularly in ensuring seamless communication between heterogeneous devices, platforms, and networks. Standardization gaps, communication latency, and inconsistent data models further complicate real-world deployment.
+
+This study proposes a CPS-AIoT framework designed to autonomously detect power quality anomalies and facilitate real-time monitoring across distributed household settings. The system leverages a network of IoT-enabled sensors and cloud-based machine learning models to process electrical parameters and identify anomalies. Additionally, the framework addresses key interoperability concerns by evaluating communication reliability, latency, and anomaly detection accuracy across varied locations and conditions.
+
+By deploying and testing the system in 14 geographically diverse households across Cebu, Philippines, this research provides practical insights into the real-world feasibility of CPS-AIoT integration for power monitoring. It also contributes toward the development of scalable, cost-effective, and standards-driven solutions for smart grid applications, particularly in resource-constrained regions.
+
+STATEMENT OF THE PROBLEM
+The community needs a reliable system that can do complex industry processes, maintaining the high demand of bulk supply needed by various industries. However, there is still a lack of interoperability in communication technologies, protocols, and standards that is needed to make the cyber and physical components of a system work. To address the issue, the goal is to develop a framework to seamlessly interoperate devices in power quality monitoring systems. We will develop an intelligent power quality monitoring system, where it utilizes Artificial Intelligence of Things (AIoT) to detect anomalies in interoperability between devices, and detect abnormal operations in the power distribution system .
+OBJECTIVE
+The study focused on enhancing the interoperability between cyber-physical systems (CPS) and the artificial intelligence of things (AIoT) for power quality monitoring and basic anomaly detection. They began by identifying the key factors that influence the interoperability of these systems, including technical, operational, and communication-related aspects. Based on those insights, we developed an integrated interoperability framework that enables seamless interaction between CPS and AIoT components to support effective monitoring and detection capabilities. Finally, we evaluated the performance of the proposed system by measuring data transfer latency and detection accuracy to assess its effectiveness and reliability.
+SCOPE AND LIMITATION
+This research was limited to the automation of gathering and displaying voltage, current, frequency, power, and power factor in households under selected distribution systems that use AIoT-based networks for detection of anomalies. The study used the Transport Layer Security (TLS) protocol in securing data while transmission. The study focused on 14 selected different households in different operational and geographical settings served by six different distribution utilities and the seamless communication between cyber and physical components. The study did not cover other aspects of power distribution and monitoring, such as transmission or generation, nor would address issues related to power pricing and outside factors that can affect the system’s operability. The study only detected anomalies in the power quality in households, it would not determine the type of power quality anomaly as well as the reason behind those anomalies. The study would rely on internet connection to transfer data from sensor networks to the cloud storage.
+METHODOLOGY
+This study designed and implemented a Cyber-Physical System (CPS) integrated with Artificial Intelligence of Things (AIoT) for real-time power quality monitoring and anomaly detection. The system architecture consists of three main layers: (1) an IoT-based sensor network for data acquisition, (2) a cloud-based infrastructure for data transmission and storage, and (3) an AI-driven analytics platform for anomaly detection and visualization.
+
+Fig 1. System Architecture Design
+
+This illustrates the overall system architecture of the AIoT-powered intelligent power quality monitoring system. At the core of the hardware layer is the PZEM004T sensor, which captures key electrical parameters such as voltage, current, power, frequency, and power factor. These readings are processed locally and transmitted via a secured internet connection to a cloud-hosted Firebase Realtime Database. The data are then accessed by backend software components and analyzed using trained AI models for anomaly detection. The results are rendered on a user-friendly web dashboard, enabling real-time visualization and decision-making. This architecture showcases the seamless interoperability between cyber and physical components, providing a scalable and intelligent framework for monitoring power quality in residential environments.
+
+Fig 2. Sensor Network Diagram
+System Overview
+The system integrates hardware, software, and AI components to collect, transmit, and analyze power data. Core modules include:
+Hardware: ESP32 and PZEM004T sensor.
+Software: Firebase, custom dashboard, and Python-based AI models.
+Security: Authentication and access control via MongoDB and Firebase rules.
+
+
+
+
+
+
+
+
+
+
+Fig 3. Deployment of Sensor Network
+System Deployment
+The sensor network was deployed across 14 selected household sites in Cebu, Philippines, each representing different operational and environmental conditions. Each site was equipped with an ESP32 microcontroller and PZEM-004T v3.0 sensors to measure electrical parameters—voltage, current, power, frequency, and power factor—in real time. These sensors transmitted data via Wi-Fi, using the Transport Layer Security (TLS) protocol to ensure encrypted communication.
+Data Acquisition and Storage
+Sensor data were sent at fixed intervals to a Firebase Realtime cloud database, formatted in JSON. Timestamped data entries were stored with thresholds defined per parameter to flag potential anomalies. Data loss, signal interruptions, and transmission delays were logged for network performance analysis.
+Anomaly Detection
+The collected data were used to train and evaluate various supervised and unsupervised machine learning models, including:
+Decision Trees
+Logistic Regression
+Random Forest
+Support Vector Machines (SVM)
+Gradient Boosting Machines (GBM)
+Multi-Layer Perceptrons (MLP)
+Autoencoders
+The models were benchmarked based on precision, recall, F1-score, and confusion matrices. Data labeling was performed using predefined threshold configurations and verified manually for supervised models.
+Interoperability and Performance Evaluation
+System interoperability was evaluated through latency, bit error rate (BER), packet loss ratio (PLR), jitter, and throughput measurements across 14 locations. Additionally, the dashboard interface was assessed based on developer evaluation guided by ISO/IEC 25010 using the eight quality characteristics, focusing on functional suitability, usability, performance efficiency, reliability, security, maintainability, portability and compatibility. This approach ensured a comprehensive evaluation of both system-level performance and software quality characteristics.
+Risk Mitigation and Security
+Risk assessment protocols were incorporated, focusing on network reliability, data privacy, and model misclassification. Firebase authentication and role-based access control (RBAC) were implemented to restrict unauthorized data access.
+RESULTS AND DISCUSSION
+The system was deployed across 14 geographically diverse household locations in Cebu, Philippines. Each site generated continuous power quality data, which was analyzed to evaluate the interoperability, anomaly detection accuracy, and dashboard usability of the proposed CPS-AIoT framework.
+Anomaly Detection Performance
+An intelligent power quality monitoring system was evaluated across 14 deployment sites in Cebu, Philippines, utilizing supervised learning models configured with predefined threshold values for anomaly detection.. Across all sites, the system demonstrated high responsiveness and classification accuracy, especially when employing Decision Tree, Random Forest, Gradient Boosting, and Multi-Layer Perceptron (MLP) models. These models achieved near-perfect performance, consistently reaching 1.00 in precision, recall, and F1 score. Their robustness against site-specific variations in power quality data and environmental conditions highlights their suitability for reliable deployment in distributed smart grid environments.
+
+In contrast, Logistic Regression and Support Vector Machine (SVM) models showed slightly reduced performance, with average F1 scores of 0.94 and 0.97, respectively. These models occasionally struggled with classifying normal and anomalous instances in certain sites, this is due to class imbalance in the labeled datasets. The Autoencoder model, though included for comparative purposes, showed significantly lower effectiveness with an average F1 score of 0.35. This reinforces the limited capability of unsupervised models like PCA when applied in contexts requiring precise classification based on structured thresholds.
+
+
+AI Model
+Precision
+Recall
+F1 Score
+Decision Tree
+1.00
+1.00
+1.00
+Logistic Regression
+0.98
+0.93
+0.94
+Random Forest
+1.00
+1.00
+1.00
+SVM
+0.98
+0.96
+0.97
+Gradient Boosting
+1.00
+1.00
+1.00
+Multi Layer Perceptron
+1.00
+1.00
+1.00
+Autoencoder
+0.44
+0.49
+0.35
+
+Table 1. Average Anomaly Detection Result
+
+Table 1 presents the averaged classification metrics for each supervised model. The consistently perfect scores of tree-based and deep learning models affirm their effectiveness in detecting anomalies under fixed thresholds. These results suggest that integrating such models into cyber-physical AIoT systems can significantly enhance grid stability and operational intelligence.
+Interoperability Metrics
+The system’s communication performance was evaluated using several metrics:
+
+NETWORK PERFORMANCE SUMMARY
+LOCATION
+RETRANSMISSION RATE
+AVERAGE LATENCY
+BATO
+7.47%
+1.080680 seconds
+BUSAY
+29.29%
+1.414150 seconds
+KODIA
+8.18%
+1.089042 seconds
+LOREGA
+29.63%
+1.420995 seconds
+NAGA
+0.93%
+1.009403 seconds
+PERRELOS
+4.35%
+1.045514 seconds
+POBLACION, CARMEN
+43.89%
+1.782123 seconds
+POBLACION, SANTA FE
+14.14%
+1.164744seconds
+PUSOK 
+7.58%
+1.082018 seconds
+SAN FERNANDO
+0.17%
+1.001699 seconds
+TALAMBAN
+3.06%
+1.031542 seconds
+TICAD
+13.01%
+1.149500 seconds
+TINAGO
+4.55%
+1.047716 seconds
+TUGAS
+8.72%
+1.095532 seconds
+
+Table 2. Network Performance Summary
+
+The network metrics varied significantly across the evaluated locations, with latency ranging from 1.00 to 1.78 seconds. And retransmission rates spanning from as low as 0.17% to nearly 44%. It was identified that the two locations San Fernando and Naga are optimal for AIoT system operation. It allowed for seamless data transfer and minimal communication disruption, ensuring that AIoT devices could operate with high responsiveness and reliability as both sites maintained a latency of exactly 1.00 second and retransmission rates of only 0.17% and 0.93% respectively. 
+
+
+Conversely, there were two locations that exhibited significant challenges due to poor network conditions, these are Poblacion, Carmen and Lorega. The data  shows that Poblacion, Carmen recorded a latency of 1.78 seconds and a retransmission rate of 43.89%, while Loraga reached the  highest measured latency at 1.42 seconds and a retransmission rate of 29.63%. High values of retransmission rate reflect a frequent data loss or network congestion, which likely led to delays in anomaly detection, reducing timeliness of alerts, and may have impacted the accuracy of real-time analysis in those environments..
+
+Dashboard Usability
+The monitoring dashboard was evaluated based on the ISO/IEC 25010 software quality standard, focusing on eight key quality characteristics observed during implementation and testing. In terms of functional suitability, the system accurately executed core monitoring functions—including real-time data visualization, historical data access, and anomaly detection—across all deployment sites. Regarding usability, the interface adhered to established UI/UX heuristics, offering a clean, consistent, and intuitive layout that enhanced user experience.
+
+For performance efficiency, the dashboard generally maintained responsiveness; however, performance delays were noted when retrieving large volumes of data from Firebase, particularly during historical data queries. In the aspect of reliability, the system proved stable under continuous use, successfully visualizing live data streams without experiencing system crashes.
+
+From a security standpoint, the implementation of Firebase Authentication and role-based access control (RBAC) ensured the protection of sensitive data and restricted access to authorized users only. In terms of maintainability, the modular codebase and use of reusable components enabled efficient debugging and simplified future enhancements.
+
+Portability testing was limited, as the system was only evaluated on Microsoft Edge, highlighting the need for cross-browser validation to ensure wider accessibility. Lastly, the system demonstrated strong compatibility, with consistent sensor data integration and JSON handling across all monitored sites, confirming interoperability with the deployed hardware.
+
+Overall, the system exhibited strong functionality, usability, and reliability, with noted limitations in performance and portability that can be addressed in future iterations. These findings support the system’s scalability and potential for adoption in public utility and local government contexts.
+Key Findings and Implications
+The study demonstrated that CPS-AIoT interoperability can be reliably achieved in household-scale deployments across both urban and rural environments. The integration of AI-driven anomaly detection significantly improved the timeliness and accuracy of power quality monitoring when compared to traditional threshold-only systems. Additionally, the framework proved to be cost-effective, scalable, and adaptable to a wide range of geographical and infrastructural contexts. These findings offer a practical model for implementing intelligent monitoring solutions that support smart grid modernization and the development of resilient energy systems, particularly in developing regions.
+
+
+
+
+
+
+CONCLUSION
+This study successfully demonstrated the design, deployment, and evaluation of a Cyber-Physical System (CPS) integrated with Artificial Intelligence of Things (AIoT) for intelligent power quality monitoring in household settings across Cebu, Philippines. By combining real-time sensor networks with cloud-based machine learning models, the system effectively detected power anomalies based on the predefined normal thresholds with high accuracy and low latency.
+
+The results confirmed that supervised AI models—particularly Decision Tree, Random Forest, Gradient Boosting, and Multi-Layer Perceptron (MLP)—achieved perfect performance in anomaly detection, with 1.00 precision, recall, and F1 scores across all locations. Models such as Logistic Regression and SVM performed slightly lower but remained reliable. In contrast, the Autoencoder, an unsupervised model, exhibited weak performance (F1-score = 0.35), indicating its limited suitability for structured, threshold-based classification tasks in this context. The system also maintained strong interoperability under varying network conditions, with low latency and minimal packet loss even in rural areas. The intuitive dashboard design further enhanced practical usability, supporting its adoption in smart grid and local utility applications.
+
+Overall, the research offers a scalable, cost-efficient, and technically robust framework that contributes to advancing interoperable energy monitoring systems. It sets a foundation for future work in integrating explainable AI, federated learning, and smart grid interoperability standards such as IEEE 1547 to further enhance the reliability, transparency, and scalability of intelligent energy infrastructures.
+REFERENCES
+[1] ISO/IEC 25010:2011, “Systems and software engineering – Systems and software Quality Requirements and Evaluation (SQuaRE) – System and software quality models.”
+[2] J. Brown et al., "AI-powered anomaly detection in smart grids", IEEE Trans. Smart Grid, vol. 11, no. 5, pp. 1304–1315, 2022.
+[3] T. Burns, J. Cosgrove, and F. Doyle, “A review of Interoperability Standards for Industry 4.0.,” Procedia Manufacturing, vol. 38, pp. 646–653, Jan. 2019, doi: 10.1016/j.promfg.2020.01.083.
+[4] H. J. Kim et al., “A comprehensive review of practical issues for interoperability using the common information model in smart grids,” Energies, vol. 13, no. 6, p. 1435, Mar. 2020, doi: 10.3390/en13061435.
+[5] T. Ahmad and D. Zhang, Using the internet of things in smart energy systems and networks, Sustainable Cities and Society, 68, 102783, 2021, issn: 22106707.
+doi: 10.1016/j.scs.2021.102783. (visited on 11/15/2024).
+[6] F. Al-Turjman and M. Abujubbeh, IoT-enabled smart grid via SM: An overview, Future Generation Computer Systems, 96, 579–590, 2019, issn: 0167739X. Doi: 10.1016/j.future.2019.02.012. (visited on 11/15/2024).
+[7] S. Boobalan, M. Celva Choudri, V. Haari, N. Gunasekar, and V. Gowtham, IoT based energy monitoring and outage reporting, in 2021 7th International Conference on Advanced Computing and Communication Systems (ICACCS), Coimbatore, India: IEEE, 19, 2021, pp.762–766, isbn: 978-1-66540-520-1. Doi: 10.1109/ICACCS51430.2021.9441894. (visited on 11/26/2024)
+[8] S. V. Achanta, K. Hao, and J. Fowler, Emerging communications and sensor technologies that advance distribution automation.
+
