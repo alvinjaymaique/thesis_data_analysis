@@ -1,0 +1,197 @@
+EXPLAINABLE AI (XAI) INTEGRATION TO CYBER-PHYSICAL ANOMALY DETECTION IN INTELLIGENT SENSOR NETWORKS FOR POWER QUALITY MONITORING IN CEBU
+Alvin Jay B. Maique Department of Computer Engineering College of Engineering Cebu Technological University Cebu, Philippines alvinmaique@gmail.com
+
+Lindon B. Matarong Department of Computer Engineering College of Engineering Cebu Technological University Cebu, Philippines lindonmatarong@gmail.com
+
+Rhea D. Paraiso Department of Computer Engineering College of Engineering Cebu Technological University Cebu, Philippines rheaparaiso@gmail.com
+
+Jayson C. Jueco Department of Electrical Engineering College of Engineering Cebu Technological University Cebu, Philippines juecoree@gmail.com
+
+Rafran P. de Villa Department of Computer Engineering College of Engineering Cebu Technological University Cebu, Philippines rafran.devilla@ctu.edu.ph
+
+ABSTRACT
+This research integrates Explainable Artificial Intelligence (XAI) into cyber-physical anomaly detection frameworks for power quality monitoring across Cebu, Philippines. Using intelligent sensor networks deployed across 12 sites, we collected over 3 million data points which were reduced to a representative 20,000-sample dataset with 10 electrical features. K-Means clustering with k=15 achieved optimal performance (Silhouette Score: 0.5321, Calinski-Harabasz Index: 17239.31) in identifying distinct operational states. For classification, Random Forest achieved 99.73% accuracy with superior computational efficiency compared to other models. SHAP (SHapley Additive exPlanations) analysis revealed voltage, voltage deviation, power factor deviation, power factor, and frequency as the most influential parameters for anomaly detection. The 15 discovered clusters were categorized into 11 "True Anomalies" requiring intervention and 4 "Operational Anomalies" representing stable conditions. Location-specific patterns were identified: Lorega experienced primarily voltage-related problems, Tugas showed power factor irregularities, and Bato exhibited unexpected frequency-related anomalies. TreeExplainer demonstrated perfect stability (1.0000) for interpretability. This XAI-enhanced framework transforms "black box" anomaly detection into interpretable insights, enabling targeted infrastructure optimization and preventive maintenance. The system improves power quality monitoring with enhanced transparency and stakeholder trust, ultimately contributing to more efficient power distribution throughout Cebu.
+
+Keywords—Explainable AI, Power Quality Monitoring, SHAP, Anomaly Detection, Intelligent Sensor Networks
+
+INTRODUCTION
+Power quality is essential for ensuring the reliability and stability of power distribution systems, especially in regions like Cebu where quality electricity is crucial for economic and social activities. Traditional power quality monitoring methods often fail to detect real-time anomalies and lack adaptability to dynamic data patterns, making it difficult for utility providers to take proactive measures. While machine learning (ML) integration in power systems has advanced rapidly through improved computational capabilities, most implementations operate as "black boxes," hindering stakeholders from understanding the decision-making process.
+
+This lack of transparency creates a trust deficit among stakeholders in the energy sector, where accountability and reliability are paramount. Each anomaly detection decision can significantly affect safety and operational efficiency, making model interpretability a serious challenge. Explainable Artificial Intelligence (XAI) has emerged as a solution to enhance ML model transparency, enabling utility operators to gain insights into model operations without sacrificing performance.
+
+This study integrates XAI, specifically the Shapley approach, into anomaly detection within cyber-physical systems for power quality monitoring in selected areas of Cebu, Philippines. Unlike traditional approaches that simply flag anomalies, this research explains why anomalies occur, transforming complex machine learning models from "black boxes" into interpretable tools that foster stakeholder confidence and enable informed decision-making.
+
+System Architecture Design Fig 1. System Architecture Design
+
+STATEMENT OF THE PROBLEM
+The rapid adoption of machine learning models for anomaly detection in power distribution systems has led to a significant challenge: many of these models are difficult to interpret and understand. This lack of transparency creates barriers for stakeholders and utility providers who cannot fully comprehend the reasons behind detected anomalies, undermining trust in AI-driven decisions. Traditional methods of anomaly detection lack precision and fail to provide actionable insights, further limiting the effectiveness of power management strategies. The problem addressed by this study is the lack of interpretability and transparency in AI-driven anomaly detection models integrated into power distribution systems in Cebu, Philippines.
+
+OBJECTIVE
+This study aims to enhance power distribution at selected utilities in Cebu, Philippines by integrating Explainable AI into anomaly detection models. Specifically, it seeks to:
+
+Identify the critical electrical parameters that cause anomalies through XAI, specifically using Shapley values
+Develop XAI techniques to make detected anomalies more interpretable and explainable
+Evaluate the performance of the integrated system in actual operation
+SCOPE AND LIMITATION
+This research focuses on integrating XAI into cyber-physical anomaly detection in intelligent sensor networks for power quality monitoring within specific areas of Cebu, Philippines. The study is limited to the deployed IoT-based sensor networks of the collaborative research group, and findings may not be generalizable to other areas or sensor types. The research does not consider downtime such as Wi-Fi outages during data collection or transmission, which may impact data accuracy and completeness. The study assumes households where sensor networks are installed have stable internet connections for real-time data transmission. Harmonics and overload anomalies are excluded from the clustering and classification processes due to sensor sampling rate limitations.
+
+METHODOLOGY
+System Architecture and Data Collection
+The study deployed intelligent sensor networks across 12 sites in Cebu, Philippines, monitoring key electrical parameters including voltage, current, frequency, power, and power factor. The system architecture consists of three primary layers:
+
+Hardware Layer: ESP32 microcontrollers and PZEM-004T sensors for data acquisition
+Cloud Layer: Firebase Realtime Database for data storage and transmission
+Analytics Layer: ML models for anomaly detection and XAI for interpretation
+Data was collected in real-time and securely transmitted via Transport Layer Security (TLS) protocol to the cloud database. A strategic data reduction approach was implemented to address the large volume of data while preserving meaningful patterns and anomalies.
+
+Feature Engineering and Data Processing
+Raw electrical parameters were supplemented with derived features to enhance anomaly detection capabilities:
+
+Table 1. Raw and Derived Features Used in Clustering and Classification
+
+Raw Features	Derived Features
+Voltage	Voltage deviation
+Current	Frequency deviation
+Frequency	Power factor deviation
+Power	Power-voltage ratio
+Power factor	Current-voltage ratio
+This comprehensive feature set enabled the capture of normal operating conditions and various types of anomalies, including voltage surges, dips, and power factor issues.
+
+Clustering and Classification
+Five clustering algorithms were evaluated to identify natural groupings in the electrical parameter data:
+
+K-Means
+Spectral Clustering
+Ward Hierarchical Clustering
+Agglomerative Clustering
+Gaussian Mixture Models
+Each algorithm was assessed using Silhouette Coefficient Score, Davies-Bouldin Index, and Calinski-Harabasz Index to determine optimal cluster count and quality.
+
+Clustering Metrics Comparison Fig 2. Clustering Metric Comparison across Varying Cluster Counts
+
+For supervised classification, multiple models were implemented and evaluated:
+
+Decision Trees
+Logistic Regression
+Random Forest
+Support Vector Machine (SVM)
+Gradient Boosting Machine (GBM)
+Multi-Layer Perceptron (MLP)
+XAI Integration
+SHAP (SHapley Additive exPlanations) analysis was applied to provide both global and local explanations for detected anomalies. Three SHAP explainers—TreeExplainer, KernelExplainer, and DeepExplainer—were evaluated based on consistency, stability, and compacity metrics.
+
+Global Feature Importance Fig 3. Global Feature Importance Across All Anomaly Types
+
+Local explanations were generated for specific anomaly instances, providing detailed insights into why particular readings were flagged as anomalous.
+
+RESULTS AND DISCUSSION
+Clustering Performance Evaluation
+The comparative analysis of clustering algorithms revealed that K-Means with k=15 provided the optimal balance of performance metrics:
+
+Table 2. Performance Metrics for Clustering Model Selection
+
+Algorithm	Silhouette Score	Davies-Bouldin Index	Calinski-Harabasz Index
+K-Means	0.5321	0.7654	17239.31
+Spectral Clustering	0.4865	0.8932	15876.42
+Ward Hierarchical	0.4732	0.9012	14982.55
+Agglomerative	0.4521	0.9345	14567.23
+Gaussian Mixture	0.4976	0.8342	16789.61
+K-Means demonstrated superior performance across all metrics, with the highest Silhouette Score (0.5321) indicating well-defined, separated clusters, and the highest Calinski-Harabasz Index (17239.31) confirming strong cluster density.
+
+PCA Visualization Fig 4. PCA Visualization of KMeans Clustering Results on Sensor Feature Space
+
+Anomaly Classification Results
+The 15 identified clusters were categorized into meaningful power quality states based on electrical parameter profiles:
+
+Table 3. Power Quality Cluster Classification with Numerical Thresholds
+
+Cluster ID	Classification	Voltage Range (V)	Power Factor	Current (A)	Key Characteristics
+0	Light Load with Voltage Surge	224.5-245.9	0.77	0.5-2.0	Intermittent voltage surge
+1	Idle with Voltage Surge	233.2-246.1	N/A	~0	Elevated voltage during idle
+2	Light Load with Undervoltage	214.0-222.1	0.73-0.76	0.5-2.0	Sustained undervoltage
+3	High Load with Voltage Instability	212.6-248.6	0.99	20+	Severe voltage swings
+4	High Load with Transient Events	152.3-248.1	0.85	10-16	Extreme voltage volatility
+5	Idle with Sustained Undervoltage	203.5-223.6	N/A	~0	Low voltage at idle
+6	Severe Power Factor Issue	221.1-244.9	0.42-0.56	2-5	Poor power factor
+7	Moderate PF Issue with Surges	224.8-244.6	0.50-0.55	2-6	Power factor issues with surges
+8	High Load with Mixed Anomalies	209.9-244.6	0.78	12-16	Wide voltage variation
+9	Light Load with Undervoltage & PF Issues	201.1-221.7	0.43	0.2-0.95	Compound quality issues
+10	Light Load with Minor Surges	229.5-245.3	0.77-0.79	0.5-2.0	Occasional voltage surges
+11	High Load Operation (Normal)	225.1-245.7	0.93	5-7	Stable parameters
+12	Idle Operation (Stable)	234.6-240.5	N/A	~0	Baseline electrical state
+13	High Load with Excellent Quality	221.3-245.2	0.96-0.98	5-6	Optimal performance
+14	Very High Load with Stability	236.7-237.0	0.98-0.99	23-42	Excellent stability under load
+These clusters were further categorized into 11 "True Anomalies" that require intervention (clusters 0-10) and 4 "Operational Anomalies" that represent stable conditions (clusters 11-14).
+
+Supervised Classification Performance
+The supervised classification models showed excellent performance in identifying anomalies based on the labeled clusters:
+
+Table 4. Classification Performance Results
+
+Model	Accuracy	Precision	Recall	F1-Score	Training Time (s)
+Random Forest	99.73%	99.74%	99.73%	99.73%	1.82
+Gradient Boosting	99.73%	99.74%	99.73%	99.73%	6.54
+Decision Tree	99.65%	99.65%	99.65%	99.65%	0.43
+MLP	99.51%	99.52%	99.51%	99.51%	14.26
+SVM	99.19%	99.21%	99.19%	99.19%	7.92
+Logistic Regression	87.54%	88.19%	87.54%	87.23%	0.68
+Random Forest and Gradient Boosting Machine achieved identical accuracy (99.73%), but Random Forest demonstrated superior computational efficiency with training time of 1.82 seconds compared to GBM's 6.54 seconds.
+
+XAI Integration Results
+The evaluation of XAI metrics revealed that TreeExplainer provided the most reliable explanations:
+
+Table 5. Evaluation Metrics for SHAP Explainers
+
+Explainer	Consistency	Stability	Compacity	Computation Time (s)
+TreeExplainer	0.9137	1.0000	0.9745	2.31
+KernelExplainer	0.8764	0.9321	0.9234	198.74
+DeepExplainer	0.8926	0.9567	0.9312	37.42
+TreeExplainer demonstrated perfect stability (1.0000), high consistency (0.9137), excellent compacity (0.9745), and the fastest computation time (2.31 seconds).
+
+Global feature importance analysis revealed the following ranking of parameters in anomaly detection:
+
+Voltage (25.3%)
+Voltage deviation (21.7%)
+Power factor deviation (18.4%)
+Power factor (15.9%)
+Frequency (10.2%)
+Current-voltage ratio (3.8%)
+Power-voltage ratio (2.6%)
+Frequency deviation (1.3%)
+Current (0.5%)
+Power (0.3%)
+Feature Importance Fig 5. Feature Importance Analysis for LightLoad_MinorSurge Anomaly
+
+Location-specific patterns were identified through local explanations:
+
+Lorega: Predominantly voltage-related problems (surges and dips)
+Tugas: Recurring power factor irregularities
+Bato: Unexpected frequency-related anomalies
+CONCLUSION
+This research successfully integrated Explainable AI into anomaly detection frameworks for power quality monitoring in Cebu, Philippines. K-Means clustering with k=15 and Random Forest classification proved most effective in identifying and categorizing power quality anomalies. SHAP analysis revealed voltage, voltage deviation, power factor deviation, power factor, and frequency as the most influential parameters for anomaly detection.
+
+The system transforms "black box" anomaly detection into interpretable insights, allowing for targeted infrastructure optimization and preventive maintenance. Location-specific patterns provide utility providers with actionable intelligence for improving grid reliability and stability. By enhancing transparency and stakeholder trust, this XAI-integrated approach significantly improves power quality monitoring systems.
+
+Key contributions include:
+
+Identification of critical electrical parameters causing anomalies through SHAP values
+Development of interpretable XAI techniques tailored to power quality monitoring
+Evaluation of the integrated system in actual operation across Cebu's distribution utilities
+This framework serves as a foundation for future research in explainable power systems analytics and provides a practical implementation model for other regions facing similar power quality challenges.
+
+REFERENCES
+[1] Phat, K., Huynh., Gurmeet, Singh., O., P., Yadav., Trung, Le., Chau, Le. (2024). Unsupervised Anomaly Detection in Electric Power Networks Using Multi-Layer Auto-Encoders. 1-6. doi: 10.1109/rams51492.2024.10457681
+
+[2] Y. Chen, X. Fan, R. Huang, Q. Huang, A. Li, and K. Guddanti, "Artificial Intelligence/Machine Learning Technology in Power System Applications (PNNL-35735)," Pacific Northwest National Laboratory, 2024.
+
+[3] R. Machlev, L. Heistrene, M. Perl, K. Levy, J. Belikov, S. Mannor, and Y. Levron, "Explainable Artificial Intelligence (XAI) techniques for energy and power systems: Review, challenges and opportunities," Energy and AI, vol. 9, p. 100169, 2022, doi: 10.1016/j.egyai.2022.100169.
+
+[4] S. Hamida, N. Chakraborty, S. Sami, K. Biswas, and M. Chowdhury, "Exploring the Landscape of Explainable Artificial Intelligence (XAI): A Systematic Review of Techniques and Applications," Big Data and Cognitive Computing, vol. 8, no. 11, p. 149, 2024, doi: 10.3390/bdcc8110149.
+
+[5] Antolijao, T. D., Mayol, S. C., Canencia, R. F., Caparroso, D. E., Patunob, M. V., Pepino Jr, M. W., Miraballes, J. A., & Jueco, J. C. (2024). Performance analysis of multi-feature data-to-image encoding across different clustering methods for labeling anomalous machine data under predictive maintenance. IEEE.
+
+[6] Husnara, Khan., Daljeet, Kaur. (2024). Cyber-physical systems. 213-229. doi: 10.58532/nbennurch188
+
+[7] J. Huang, C. Liu, Y. Yang and Y. Liu, "A GAN-Based Power Quality Anomaly Detection Method for Imbalanced Multivariate Time Series," 2023 IEEE 6th International Conference on Computer and Communication Engineering Technology (CCET), Beijing, China, 2023, doi: 10.1109/CCET59170.2023.10335146.
+
+[8] A. Nascita, R. Carillo, F. Giampetraglia, A. Iacono, V. Persico and A. Pescapé, "Interpretability and Complexity Reduction in Iot Network Anomaly Detection Via XAI," 2024 IEEE International Conference on Acoustics, Speech, and Signal Processing Workshops (ICASSPW), Seoul, Korea, Republic of, 2024, pp. 325-329, doi: 10.1109/ICASSPW62465.2024.10626031.
